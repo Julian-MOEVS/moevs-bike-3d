@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MOEVS Bike — Engineered for the Quiet Ride</title>
+<meta name="description" content="MOEVS Bike — premium Nederlandse e-bikes, fatbikes en e-steps." />
+
+<!-- ─── Fonts ─────────────────────────────────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+/* ──────────────────────────────────────────────────────────
+   1. DESIGN TOKENS — pas accentkleur aan met --accent
+   ────────────────────────────────────────────────────────── */
+:root {
+  /* ── MOEVS brand tokens (overgenomen uit moevs.bike Elementor + jkit) ── */
+  --bg:        #0e0e0e;        /* dark base */
+  --bg-soft:   #1E1E1E;        /* MOEVS dark surface */
+  --fg:        #ffffff;
+  --fg-dim:    #b8b8b8;
+  --fg-mute:   #7A7A7A;        /* Elementor --e-global-color-text */
+  --line:      #2a2a2a;
+  --accent:    #ffffff;        /* primaire CTA — wit op donker, MOEVS-stijl */
+  --accent-dim:#c8c8c8;
+  --link:      #0058E6;        /* jkit link/button blue */
+  --link-hover:#0048BD;
+  --overlay:   #00000033;      /* MOEVS hero-overlay (rgba 0,0,0,0.2) */
+
+  /* MOEVS-Elementor variabelen (compatibel benoemd) */
+  --e-color-primary:   #6EC1E4;
+  --e-color-secondary: #54595F;
+  --e-color-text:      #7A7A7A;
+  --e-color-accent:    #61CE70;
+
+  /* Container — Elementor default 1140px */
+  --container-max:     1140px;
+
+  /* MOEVS font: Montserrat — overal gebruikt (display én body) */
+  --serif:     'Montserrat', system-ui, sans-serif;
+  --mono:      'Montserrat', system-ui, sans-serif;
+}
+
+/* ──────────────────────────────────────────────────────────
+   2. RESET + BASE
+   ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--fg); }
+body {
+  font-family: var(--mono);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+/* ──────────────────────────────────────────────────────────
+   3. PAGE BACKGROUND — grain + grid
+   ────────────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ──────────────────────────────────────────────────────────
+   4. NAVIGATION
+   ────────────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 40px;
+  z-index: 50;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.nav__brand {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.nav__brand b { font-style: normal; font-weight: 500; letter-spacing: 0.04em; font-family: var(--mono); font-size: 13px; vertical-align: middle; margin-right: 8px; }
+.nav__menu { display: flex; gap: 28px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; }
+.nav__menu a { opacity: 0.75; transition: opacity .25s; position: relative; padding-bottom: 4px; }
+.nav__menu a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right;
+  transition: transform .35s cubic-bezier(.65,.05,.36,1);
+}
+.nav__menu a:hover { opacity: 1; }
+.nav__menu a:hover::after { transform: scaleX(1); transform-origin: left; }
+.nav__cta {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+  border: 1px solid currentColor; padding: 10px 18px; border-radius: 999px;
+  transition: background .3s, color .3s;
+}
+.nav__cta:hover { background: var(--fg); color: var(--bg); }
+
+/* ──────────────────────────────────────────────────────────
+   5. HERO
+   ────────────────────────────────────────────────────────── */
+.hero {
+  position: relative; min-height: 100vh; width: 100%;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 0 40px;
+  z-index: 5;
+}
+/* MOEVS hero overlay — semi-transparante donkere laag (#00000033) */
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--overlay);
+  pointer-events: none;
+  z-index: -1;
+}
+.hero > * { max-width: var(--container-max); width: 100%; text-align: center; }
+.hero__eyebrow {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.32em;
+  color: var(--fg-dim);
+  margin-bottom: 32px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero__eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent-dim); }
+.hero__title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(64px, 13vw, 220px);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.hero__title em { font-style: italic; color: var(--accent); font-weight: 400; }
+.hero__sub {
+  max-width: 540px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--fg-dim);
+  margin-bottom: 60px;
+  letter-spacing: 0.04em;
+}
+.hero__hint {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.32em;
+  color: var(--fg-mute);
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  transition: opacity .6s;
+}
+.hero__hint span::after { content: '↓'; display: block; margin-top: 8px; animation: bob 2.4s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+/* ──────────────────────────────────────────────────────────
+   6. PINNED SCENE
+   ────────────────────────────────────────────────────────── */
+.scene-container {
+  position: relative;
+  height: 1200vh;           /* totale scroll-lengte = 12 schermen — extra traag voor focus en laad-buffer */
+  z-index: 6;
+}
+.scene-pin {
+  position: sticky; top: 0;
+  height: 100vh; width: 100%;
+  overflow: hidden;
+}
+#bike-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+
+/* Decoratieve concentrische ringen (verschijnen in fase 4) */
+.rings { position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; opacity: 0; }
+.rings__ring {
+  position: absolute;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+/* Scene-label linksboven */
+.scene-label {
+  position: absolute; top: 120px; left: 40px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.28em;
+  color: var(--fg-dim);
+  display: flex; align-items: center; gap: 12px;
+  z-index: 10;
+}
+.scene-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+.scene-label__num { font-family: var(--serif); font-style: italic; color: var(--accent); }
+
+/* ──────────────────────────────────────────────────────────
+   7. PROGRESS INDICATOR (rechts)
+   ────────────────────────────────────────────────────────── */
+.progress {
+  position: absolute; top: 50%; right: 40px; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 22px;
+  z-index: 10;
+}
+.progress__step {
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  color: var(--fg-mute);
+  transition: color .4s;
+}
+.progress__step .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1px solid currentColor;
+  transition: background .4s, transform .4s;
+}
+.progress__step .label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em;
+  opacity: 0; transform: translateX(8px);
+  transition: opacity .4s, transform .4s;
+}
+.progress__step.active { color: var(--accent); }
+.progress__step.active .dot { background: var(--accent); transform: scale(1.4); }
+.progress__step.active .label { opacity: 1; transform: translateX(0); }
+
+/* ──────────────────────────────────────────────────────────
+   8. SPEC PANELS (overlays op canvas — fase 3)
+   ────────────────────────────────────────────────────────── */
+.spec-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
+.spec-panel {
+  position: absolute;
+  max-width: 380px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s, transform .6s;
+  pointer-events: none;
+}
+.spec-panel.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.spec-panel__eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.spec-panel__eyebrow::before { content: ''; width: 20px; height: 1px; background: currentColor; }
+.spec-panel__head { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: clamp(32px, 4vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--fg); margin-bottom: 18px; }
+.spec-panel__body { color: var(--fg-dim); font-size: 13px; line-height: 1.7; margin-bottom: 26px; max-width: 340px; }
+.spec-panel__stats { display: flex; gap: 36px; padding-top: 22px; border-top: 1px solid var(--line); }
+.spec-panel__stat .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.24em; color: var(--fg-mute); margin-bottom: 6px; }
+.spec-panel__stat .val { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--fg); letter-spacing: -0.02em; }
+.spec-panel__stat .val sup { font-family: var(--mono); font-size: 11px; color: var(--fg-dim); margin-left: 4px; vertical-align: top; }
+
+/* posities: links / rechts / midden, gespreid over de scene */
+.spec-panel--tl { top: 22%;  left: 6%; }
+.spec-panel--tr { top: 22%;  right: 6%; text-align: right; }
+.spec-panel--bl { bottom: 16%; left: 6%; }
+.spec-panel--br { bottom: 16%; right: 6%; text-align: right; }
+.spec-panel--c  { top: 50%; left: 50%; transform: translate(-50%, calc(-50% + 20px)); text-align: center; }
+.spec-panel--c.active { transform: translate(-50%, -50%); }
+.spec-panel--tr .spec-panel__eyebrow,
+.spec-panel--br .spec-panel__eyebrow { flex-direction: row-reverse; }
+.spec-panel--tr .spec-panel__stats,
+.spec-panel--br .spec-panel__stats { justify-content: flex-end; }
+
+/* ── INTRO TITLE OVERLAY (centraal) ── */
+.intro-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .8s;
+  z-index: 9;
+  padding: 0 40px;
+}
+.intro-overlay.active { opacity: 1; }
+.intro__eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.32em; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+.intro__eyebrow::before, .intro__eyebrow::after { content: ''; width: 28px; height: 1px; background: currentColor; }
+.intro__title { font-family: var(--serif); font-weight: 300; font-size: clamp(54px, 11vw, 180px); line-height: 0.92; letter-spacing: -0.04em; color: var(--fg); margin-bottom: 20px; }
+.intro__title em { font-style: italic; color: var(--accent); }
+.intro__sub { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: clamp(20px, 2.4vw, 32px); color: var(--fg-dim); letter-spacing: -0.01em; max-width: 24ch; }
+.intro__sub em { color: var(--fg); }
+
+/* ── DISPLAY LOGO — verschijnt op stuur-display na fly-over ── */
+.display-logo {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, calc(-50% + 80px)) scale(0.85);
+  opacity: 0;
+  transition: opacity .9s ease-out, transform .9s ease-out;
+  pointer-events: none;
+  z-index: 9;
+}
+.display-logo img {
+  height: 86px; width: auto; display: block;
+  filter: brightness(0) invert(1);   /* wit op donker */
+}
+.display-logo.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ──────────────────────────────────────────────────────────
+   9. OUTRO
+   ────────────────────────────────────────────────────────── */
+.outro {
+  position: relative;
+  min-height: 100vh;       /* MOEVS section default */
+  padding: 160px 40px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  z-index: 5;
+}
+.outro > * { max-width: var(--container-max); width: 100%; }
+.outro__title { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: clamp(48px, 7vw, 110px); line-height: 0.95; letter-spacing: -0.03em; max-width: 16ch; margin-bottom: 40px; }
+.outro__title b { font-style: normal; font-weight: 400; color: var(--accent); }
+.outro__cta-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 24px; }
+.btn {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em;
+  padding: 16px 28px; border: 1px solid var(--line); border-radius: 999px;
+  transition: background .3s, border-color .3s, color .3s;
+}
+/* MOEVS / jkit-stijl primaire knop — blauw #0058E6 */
+.btn--primary { background: var(--link); color: #fff; border-color: var(--link); }
+.btn--primary:hover { background: var(--link-hover); border-color: var(--link-hover); }
+.btn--ghost:hover { border-color: var(--fg); }
+
+/* footer-meta */
+.outro__meta { margin-top: 80px; display: flex; gap: 32px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.24em; color: var(--fg-mute); }
+
+/* ──────────────────────────────────────────────────────────
+   12. DETAILS / SPECS GRID — "It's all about the details"
+   ────────────────────────────────────────────────────────── */
+.details {
+  position: relative;
+  background: var(--bg-soft);
+  padding: 140px 40px;
+  z-index: 5;
+}
+.details__inner { max-width: var(--container-max); margin: 0 auto; }
+.details__head { display: flex; flex-direction: column; gap: 18px; margin-bottom: 80px; max-width: 760px; }
+.details__eyebrow {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.32em;
+  color: var(--fg-dim);
+  display: flex; align-items: center; gap: 12px;
+}
+.details__eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent); }
+.details__title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 84px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.details__title em { font-style: italic; font-weight: 500; color: var(--fg-dim); }
+.details__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.spec-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  gap: 20px;
+}
+.spec-row:nth-child(odd) { padding-right: 30px; border-right: 1px solid var(--line); }
+.spec-row:nth-child(even) { padding-left: 30px; }
+.spec-row dt {
+  font-family: var(--serif); font-weight: 500;
+  font-size: 18px; letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.spec-row dd {
+  font-size: 13px; color: var(--fg-dim);
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 768px) {
+  .details { padding: 80px 20px; }
+  .details__head { margin-bottom: 50px; }
+  .details__grid { grid-template-columns: 1fr; }
+  .spec-row:nth-child(odd) { padding-right: 0; border-right: none; }
+  .spec-row:nth-child(even) { padding-left: 0; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   13. EVERYONE BANNER
+   ────────────────────────────────────────────────────────── */
+.everyone {
+  position: relative;
+  padding: 140px 40px;
+  text-align: center;
+  background: var(--bg);
+  z-index: 5;
+}
+.everyone__title {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(40px, 7vw, 96px);
+  line-height: 0.96; letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--fg);
+  max-width: 18ch; margin: 0 auto 22px;
+}
+.everyone__title em { font-style: italic; font-weight: 500; color: var(--accent-dim); }
+.everyone__sub {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.28em;
+  color: var(--fg-dim);
+}
+
+/* ──────────────────────────────────────────────────────────
+   14. FOOTER (MOEVS-style)
+   ────────────────────────────────────────────────────────── */
+.footer {
+  position: relative;
+  background: var(--bg-soft);
+  padding: 100px 40px 32px;
+  z-index: 5;
+  border-top: 1px solid var(--line);
+}
+.footer__top {
+  max-width: var(--container-max); margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 80px;
+}
+.footer__brand { display: flex; flex-direction: column; gap: 28px; }
+.footer__logo { height: 40px; width: auto; filter: brightness(0) invert(1); }
+.footer__tagline {
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.05; letter-spacing: -0.02em;
+  color: var(--fg); text-transform: uppercase;
+}
+.footer__tagline em { font-style: italic; color: var(--fg-dim); }
+.footer__newsletter h3 {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.28em;
+  font-weight: 600; color: var(--fg);
+  margin-bottom: 14px;
+}
+.newsletter {
+  display: flex; gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px; overflow: hidden;
+  background: var(--bg);
+}
+.newsletter input {
+  flex: 1; min-width: 0;
+  background: transparent; border: 0; outline: 0;
+  padding: 14px 22px;
+  color: var(--fg); font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+}
+.newsletter input::placeholder { color: var(--fg-mute); }
+.newsletter button {
+  background: var(--link); color: #fff;
+  padding: 14px 26px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em;
+  font-weight: 600; cursor: pointer;
+  transition: background .25s;
+}
+.newsletter button:hover { background: var(--link-hover); }
+
+.footer__cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 36px;
+}
+.footer__col h3 {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.28em;
+  font-weight: 700; color: var(--fg);
+  margin-bottom: 22px;
+}
+.footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer__col a {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--fg-dim); transition: color .25s;
+}
+.footer__col a:hover { color: var(--link); }
+
+.footer__bottom {
+  max-width: var(--container-max); margin: 80px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.24em;
+  color: var(--fg-mute);
+}
+
+@media (max-width: 900px) {
+  .footer__top { grid-template-columns: 1fr; gap: 50px; }
+  .footer__cols { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+}
+@media (max-width: 768px) {
+  .footer { padding: 60px 20px 28px; }
+  .everyone { padding: 80px 20px; }
+  .footer__bottom { flex-direction: column; gap: 10px; text-align: center; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   10. PRELOADER (fase 4)
+   ────────────────────────────────────────────────────────── */
+.preloader { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center; transition: opacity .8s; }
+.preloader.hidden { opacity: 0; pointer-events: none; }
+.preloader__bar { width: 200px; height: 1px; background: var(--line); position: relative; overflow: hidden; }
+.preloader__bar::after { content: ''; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+.preloader[data-progress="1"] .preloader__bar::after { transform: scaleX(1); }
+.preloader__label { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-mute); }
+
+/* ──────────────────────────────────────────────────────────
+   11. RESPONSIVE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav { padding: 18px 20px; }
+  .nav__menu { display: none; }
+  .hero { padding: 0 20px 60px; }
+  .progress { right: 16px; gap: 16px; }
+  .progress__step .label { display: none; }
+  .scene-label { left: 20px; top: 90px; font-size: 10px; }
+  .spec-panel--tl, .spec-panel--bl { left: 20px; }
+  .spec-panel--tr, .spec-panel--br { right: 20px; }
+  .spec-panel { max-width: 78vw; }
+  .spec-panel__stats { gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── PRELOADER ────────────────────────────────────────── -->
+<div class="preloader" id="preloader">
+  <div class="preloader__bar"></div>
+  <div class="preloader__label">Loading the ride…</div>
+</div>
+
+<!-- ── NAV ──────────────────────────────────────────────── -->
+<nav class="nav">
+  <a href="#" class="nav__brand">
+    <img src="https://moevs.bike/wp-content/uploads/2024/02/logo.webp"
+         alt="MOEVS Bike"
+         style="height:32px;width:auto;display:block;filter:brightness(0) invert(1);" />
+  </a>
+  <div class="nav__menu">
+    <a href="#bikes">Bikes</a>
+    <a href="#specs">Specs</a>
+    <a href="#stories">Stories</a>
+    <a href="#reserve">Reserve</a>
+  </div>
+  <a href="#reserve" class="nav__cta">Reserve →</a>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero__eyebrow">PROJECT ONE</div>
+  <h1 class="hero__title">YOUR <em>DAILY</em><br/>DRIVER.</h1>
+  <p class="hero__sub">De MOEVS First One — verwijderbare 360 Wh batterij, krachtige 250 W motor, geïntegreerde LED-verlichting. Voor iedereen, elke dag.</p>
+  <div class="hero__hint" id="hero-hint"><span>Scroll to explore</span></div>
+</section>
+
+<!-- ── PINNED SCENE ────────────────────────────────────── -->
+<section class="scene-container">
+  <div class="scene-pin">
+
+    <!-- decoratieve ringen -->
+    <div class="rings" id="rings">
+      <div class="rings__ring" style="width:60vmin;height:60vmin"></div>
+      <div class="rings__ring" style="width:80vmin;height:80vmin"></div>
+      <div class="rings__ring" style="width:100vmin;height:100vmin"></div>
+    </div>
+
+    <!-- 3D canvas -->
+    <canvas id="bike-canvas"></canvas>
+
+    <!-- scene-label linksboven -->
+    <div class="scene-label">
+      <span class="scene-label__num" id="scene-num">01</span>
+      <span id="scene-name">Overview</span>
+    </div>
+
+    <!-- progress indicator rechts -->
+    <ul class="progress" id="progress">
+      <li class="progress__step" data-step="0"><span class="dot"></span><span class="label">Intro</span></li>
+      <li class="progress__step" data-step="1"><span class="dot"></span><span class="label">Side view</span></li>
+      <li class="progress__step" data-step="2"><span class="dot"></span><span class="label">Front light</span></li>
+      <li class="progress__step" data-step="3"><span class="dot"></span><span class="label">Beauty</span></li>
+      <li class="progress__step" data-step="4"><span class="dot"></span><span class="label">Energy</span></li>
+      <li class="progress__step" data-step="5"><span class="dot"></span><span class="label">Visibility</span></li>
+      <li class="progress__step" data-step="6"><span class="dot"></span><span class="label">Slide</span></li>
+      <li class="progress__step" data-step="7"><span class="dot"></span><span class="label">MOEVS</span></li>
+    </ul>
+
+    <!-- ── DISPLAY LOGO — verschijnt bij display-zoom op het einde ── -->
+    <div class="display-logo" id="display-logo">
+      <img src="https://moevs.bike/wp-content/uploads/2024/02/logo.webp" alt="MOEVS" />
+    </div>
+
+    <!-- ── INTRO TITLE (centraal, groot, vliegt voorbij tijdens scroll) ── -->
+    <div class="intro-overlay" id="intro-overlay">
+      <div class="intro__eyebrow">PROJECT ONE</div>
+      <h2 class="intro__title">YOUR DAILY <em>DRIVER.</em></h2>
+      <p class="intro__sub">For everyone, <em>every day.</em></p>
+    </div>
+
+    <!-- ── SPEC PANELS — accu (zijkant) en achterlicht (rear) ── -->
+    <div class="spec-overlay" id="spec-overlay">
+      <article class="spec-panel spec-panel--bl" data-panel="front">
+        <div class="spec-panel__eyebrow">01 · Veiligheid</div>
+        <h3 class="spec-panel__head">Geïntegreerde <em>LED-verlichting.</em></h3>
+        <p class="spec-panel__body">Geen losse lamp, geen rubberen klemmen — het voorlicht zit volledig geïntegreerd in het frame en wordt gevoed door dezelfde batterij. Altijd zichtbaar, ook in de schemering.</p>
+        <div class="spec-panel__stats">
+          <div class="spec-panel__stat"><div class="lbl">Headlight</div><div class="val">LED</div></div>
+          <div class="spec-panel__stat"><div class="lbl">Power</div><div class="val">Battery<sup>fed</sup></div></div>
+        </div>
+      </article>
+
+      <article class="spec-panel spec-panel--tl" data-panel="battery" style="left: 18%;">
+        <div class="spec-panel__eyebrow">02 · Energy</div>
+        <h3 class="spec-panel__head">Verwijderbare <em>360 Wh batterij.</em></h3>
+        <p class="spec-panel__body">36 V, 10 Ah Li-ion cel — slim verborgen in het onderbuis-profiel en met één klik uitneembaar. Tot 80 km bereik en 4–5 uur laadtijd aan je bureau.</p>
+        <div class="spec-panel__stats">
+          <div class="spec-panel__stat"><div class="lbl">Capacity</div><div class="val">360<sup>Wh</sup></div></div>
+          <div class="spec-panel__stat"><div class="lbl">Range</div><div class="val">80<sup>km</sup></div></div>
+        </div>
+      </article>
+
+      <article class="spec-panel spec-panel--bl" data-panel="rear" style="left: 8%; bottom: 18%;">
+        <div class="spec-panel__eyebrow">03 · Visibility</div>
+        <h3 class="spec-panel__head">LED-achterlicht, <em>fully integrated.</em></h3>
+        <p class="spec-panel__body">Het achterlicht zit in het zadelbuis-profiel verwerkt — geen accessoire, geen kabels op zicht. Onderdeel van het geïntegreerde LED-systeem dat MOEVS vanaf de eerste rit veilig houdt.</p>
+        <div class="spec-panel__stats">
+          <div class="spec-panel__stat"><div class="lbl">Taillight</div><div class="val">LED</div></div>
+          <div class="spec-panel__stat"><div class="lbl">Style</div><div class="val">Integrated</div></div>
+        </div>
+      </article>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── DETAILS / FULL SPECS GRID ─────────────────────────── -->
+<section class="details" id="specs">
+  <div class="details__inner">
+    <div class="details__head">
+      <span class="details__eyebrow">Specs</span>
+      <h2 class="details__title">IT'S ALL ABOUT <em>THE DETAILS.</em></h2>
+    </div>
+    <dl class="details__grid">
+      <div class="spec-row"><dt>Frame</dt><dd>6061 Alloy Frame</dd></div>
+      <div class="spec-row"><dt>Motor</dt><dd>Mivice M080 250W Rear Hub</dd></div>
+      <div class="spec-row"><dt>Tires</dt><dd>Speedster 29 × 2.15</dd></div>
+      <div class="spec-row"><dt>Charging time</dt><dd>4–5 hours</dd></div>
+      <div class="spec-row"><dt>Battery</dt><dd>36V, 10Ah Li-ion 360Wh</dd></div>
+      <div class="spec-row"><dt>Top speed</dt><dd>25 km/h</dd></div>
+      <div class="spec-row"><dt>Range</dt><dd>Up to 80 km</dd></div>
+      <div class="spec-row"><dt>Sensor</dt><dd>Torque Sensor</dd></div>
+      <div class="spec-row"><dt>Pedal assistance</dt><dd>5</dd></div>
+      <div class="spec-row"><dt>Controller</dt><dd>Mivice C201</dd></div>
+      <div class="spec-row"><dt>Riders height</dt><dd>165–205 cm</dd></div>
+      <div class="spec-row"><dt>Front fork</dt><dd>6066 Alloy Fork</dd></div>
+      <div class="spec-row"><dt>Headlight</dt><dd>LED</dd></div>
+      <div class="spec-row"><dt>Belt driver</dt><dd>Gates CDN Belt</dd></div>
+      <div class="spec-row"><dt>Brakes</dt><dd>Tektro Hydraulic</dd></div>
+      <div class="spec-row"><dt>Taillight</dt><dd>LED</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ── EVERYONE / FAQ TEASER ─────────────────────────────── -->
+<section class="everyone">
+  <h2 class="everyone__title">For everyone, <em>every day.</em></h2>
+  <p class="everyone__sub">Riders height 165–205 cm · Tot 80 km bereik · 5 ondersteuningsstanden</p>
+</section>
+
+<!-- ── OUTRO ────────────────────────────────────────────── -->
+<section class="outro" id="reserve">
+  <h2 class="outro__title">Reserve <b>your First One.</b><br/>Built when you order.</h2>
+  <p style="color:var(--fg-dim); max-width:480px; margin-bottom:8px">Wij bieden bij verkooppunten proefritten aan.</p>
+  <div class="outro__cta-row">
+    <a href="https://moevs.bike/first-one/" class="btn btn--primary">Reserve First One</a>
+    <a href="#" class="btn btn--ghost">Book a test ride</a>
+  </div>
+</section>
+
+<!-- ── FOOTER (MOEVS structuur) ──────────────────────────── -->
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <img src="https://moevs.bike/wp-content/uploads/2024/02/logo.webp" alt="MOEVS Bike" class="footer__logo" />
+      <p class="footer__tagline">Join the <em>movement.</em></p>
+      <div class="footer__newsletter">
+        <h3>STAY UP TO DATE</h3>
+        <form class="newsletter" onsubmit="event.preventDefault();">
+          <input type="email" placeholder="ENTER YOUR EMAIL" required />
+          <button type="submit">SUBSCRIBE</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>PROJECTS</h3>
+        <ul>
+          <li><a href="https://moevs.bike/first-one/">FIRST ONE</a></li>
+          <li><a href="https://moevs.bike/second-one/">SECOND ONE</a></li>
+          <li><a href="https://moevs.bike/second-one/">SPECIAL ONE</a></li>
+          <li><a href="https://moevs.bike/accessoires/">ACCESSORIES</a></li>
+          <li><a href="https://moevs.bike/MOEVS-Bike-installation-manual.pdf">INSTALLATION MANUAL</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3>SERVICE</h3>
+        <ul>
+          <li><a href="https://moevs.bike/care/">CARE</a></li>
+          <li><a href="https://moevs.bike/theft/">THEFT</a></li>
+          <li><a href="https://moevs.bike/leasing/">LEASING</a></li>
+          <li><a href="https://moevs.bike/garantie/">GUARANTEE</a></li>
+          <li><a href="#">BUSINESS</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3>ABOUT</h3>
+        <ul>
+          <li><a href="#">STORES</a></li>
+          <li><a href="#">OUR STORY</a></li>
+          <li><a href="#">TEAM MOEVS</a></li>
+          <li><a href="#">PRESS</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3>HELP</h3>
+        <ul>
+          <li><a href="#">CONTACT</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© MOEVS Bike · Eindhoven, NL</span>
+    <span>moevs.bike</span>
+  </div>
+</footer>
+
+<!-- ── DEPENDENCIES (CDN, ESM) ──────────────────────────── -->
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<!-- GSAP, ScrollTrigger, Lenis als globals (UMD) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader }   from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader }  from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ STATE — central object, gemanipuleerd door scroll-timeline
+        Pas hier waarden aan om choreography te tweaken (FASE 2).
+   ────────────────────────────────────────────────────────── */
+const state = {
+  rotY: 0,        // model y-rotatie (rad)
+  rotX: 0,        // model x-rotatie (rad)
+  posX: 0,        // camera x
+  posY: 1.0,      // camera y
+  posZ: 4.5,      // camera z (afstand)
+  bikeY: 0,       // model y-offset
+  fov: 35,
+};
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ THREE.JS SETUP
+   ────────────────────────────────────────────────────────── */
+const canvas   = document.getElementById('bike-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.55;
+
+const scene = new THREE.Scene();
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environment = envTex;
+scene.environmentIntensity = 1.6;   // sterker indirect licht via PBR-environment
+
+const camera = new THREE.PerspectiveCamera(state.fov, 1, 0.01, 100);
+camera.position.set(state.posX, state.posY, state.posZ);
+camera.lookAt(0, 0.6, 0);
+
+/* ──── LIGHTING — ambient + key + rim + fill ──── */
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+const key = new THREE.DirectionalLight(0xfff1d6, 3.0);   // warm key
+key.position.set(3, 4, 2);
+scene.add(key);
+
+const rim = new THREE.DirectionalLight(0xa8c8ff, 1.6);   // cool rim
+rim.position.set(-3, 2, -3);
+scene.add(rim);
+
+const fill = new THREE.DirectionalLight(0xffffff, 1.0);  // soft fill
+fill.position.set(0, -2, 2);
+scene.add(fill);
+
+// extra omni-fillers zodat geen vlak ooit volledig zwart is
+const fillTop  = new THREE.DirectionalLight(0xffffff, 0.7); fillTop.position.set(0, 5, 0);  scene.add(fillTop);
+const fillBack = new THREE.DirectionalLight(0xffffff, 0.5); fillBack.position.set(0, 1, -5); scene.add(fillBack);
+
+
+/* ──── BIKE CONTAINER ──── */
+const bikeGroup = new THREE.Group();
+scene.add(bikeGroup);
+
+/* ──── PLACEHOLDER BIKE (primitives) ──── */
+function buildPlaceholderBike() {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color: 0xc8b88a, metalness: 0.55, roughness: 0.32 });
+  const dark = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.3, roughness: 0.6 });
+
+  // wheels
+  const wheelGeo = new THREE.TorusGeometry(0.55, 0.045, 16, 60);
+  const w1 = new THREE.Mesh(wheelGeo, dark); w1.position.set(-0.95, 0, 0); w1.rotation.y = Math.PI / 2; g.add(w1);
+  const w2 = new THREE.Mesh(wheelGeo, dark); w2.position.set( 0.95, 0, 0); w2.rotation.y = Math.PI / 2; g.add(w2);
+
+  // tubes
+  const tube = (x1,y1,z1, x2,y2,z2, r=0.04) => {
+    const dx=x2-x1, dy=y2-y1, dz=z2-z1;
+    const len = Math.hypot(dx,dy,dz);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 16), mat);
+    m.position.set((x1+x2)/2,(y1+y2)/2,(z1+z2)/2);
+    m.lookAt(x2,y2,z2); m.rotateX(Math.PI/2);
+    g.add(m);
+  };
+  tube(-0.95,0,0,  0,0.7,0);   // chain stay
+  tube( 0.95,0,0,  0,0.7,0);   // seat stay
+  tube( 0,0.7,0,  -0.6,1.05,0);// top tube
+  tube(-0.6,1.05,0,-0.95,0,0); // down tube
+  tube(-0.6,1.05,0,-0.6,1.4,0);// seat post
+
+  // saddle
+  const saddle = new THREE.Mesh(new THREE.BoxGeometry(0.3,0.06,0.12), dark);
+  saddle.position.set(-0.6,1.45,0); g.add(saddle);
+
+  // handlebar
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.025,0.025,0.5,12), dark);
+  bar.rotation.x = Math.PI/2; bar.position.set(0.4,1.2,0); g.add(bar);
+
+  return g;
+}
+
+/* ──── AUTO-FIT helper voor echte modellen ──── */
+function fitModel(obj) {
+  const box = new THREE.Box3().setFromObject(obj);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const scale  = 2.2 / maxDim;          // doel-grootte ≈ 2.2 units
+  obj.scale.setScalar(scale);
+  // her-bereken center na scale
+  obj.position.sub(center.multiplyScalar(scale));
+  obj.position.y += -box.min.y * scale * 0.5;  // wat optillen
+}
+
+/* ──── GLTF LOADER met Draco ──── */
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(dracoLoader);
+
+const preloader = document.getElementById('preloader');
+
+let bikeModel = null;
+gltfLoader.load(
+  'bike.glb',
+  (gltf) => {
+    bikeModel = gltf.scene;
+    fitModel(bikeModel);
+    bikeGroup.add(bikeModel);
+    invalidate();
+    hidePreloader();
+  },
+  (xhr) => {
+    if (xhr.lengthComputable) {
+      const p = xhr.loaded / xhr.total;
+      preloader.style.setProperty('--p', p);
+    }
+  },
+  (err) => {
+    console.warn('bike.glb niet gevonden of fout — placeholder gebruiken.', err);
+    bikeModel = buildPlaceholderBike();
+    bikeGroup.add(bikeModel);
+    invalidate();
+    hidePreloader();
+  }
+);
+
+function hidePreloader() {
+  preloader.dataset.progress = '1';
+  setTimeout(() => preloader.classList.add('hidden'), 600);
+}
+
+/* ──── RESIZE ──── */
+function resize() {
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(() => { resize(); invalidate(); }).observe(canvas);
+resize();
+
+/* ──── RENDER LOOP ──── on-demand: alleen renderen als er iets wijzigde ──── */
+let needsRender = true;
+function invalidate() { needsRender = true; }
+function tick() {
+  if (needsRender) {
+    renderer.render(scene, camera);
+    needsRender = false;
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ LENIS — smooth scrolling
+   ────────────────────────────────────────────────────────── */
+const lenis = new Lenis({ duration: 0.6, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ HERO HINT FADE OUT ON SCROLL (fase 4 polish)
+   ────────────────────────────────────────────────────────── */
+const heroHint = document.getElementById('hero-hint');
+window.addEventListener('scroll', () => {
+  heroHint.style.opacity = window.scrollY > 80 ? '0' : '1';
+}, { passive: true });
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ HOTSPOT TARGETS — wereldposities in de three.js scene
+        (gemeten uit het GLB en aangepast aan onze auto-fit)
+        Pas hier waarden aan om kijk-doelen te verschuiven.
+   ────────────────────────────────────────────────────────── */
+const TARGETS = {
+  // 1. Frame finished .012 — vorkdetail aan de voorkant
+  frame012: new THREE.Vector3(-0.06, -0.14,  0.58),
+  // 2. Stem-Handlebar.015 — rechter handvat / brake-lever
+  stem015:  new THREE.Vector3( 0.31,  0.58, -0.34),
+  // 3. Stem-Handlebar.007 — stem-midden / topcap
+  stem007:  new THREE.Vector3( 0.00,  0.52, -0.36),
+};
+
+/* Camera-keyframes: elk keyframe heeft een eigen progress-waarde (0–1).
+   Gelijke progress-waarden achter elkaar = pauze (camera blijft staan). */
+const KEYFRAMES = [
+  { // 0.00  ▸ START — de oude eind-positie: vooraan-boven, kijkt op stem.007
+    progress: 0.00,
+    pos:  new THREE.Vector3(0.0, 0.95,  0.7),
+    look: TARGETS.stem007,
+    fov:  30,
+  },
+  { // 0.18  ▸ houd start vast tijdens titel-intro (subtiele drift naar achter)
+    progress: 0.18,
+    pos:  new THREE.Vector3(0.05, 0.95, 0.85),
+    look: TARGETS.stem007,
+    fov:  30,
+  },
+  { // 0.32  ▸ ZIJKANT — volledige side-view van rechts
+    progress: 0.32,
+    pos:  new THREE.Vector3(2.9, 0.30, 0.0),
+    look: new THREE.Vector3(0.0, 0.20, 0.0),
+    fov:  32,
+  },
+  { // 0.42  ▸ ORBIT — kwart om de fiets, halverwege tussen zij en voor
+    //  +X / -Z corner, blijft op gelijke hoogte
+    progress: 0.42,
+    pos:  new THREE.Vector3(2.05, 0.42, -2.05),
+    look: new THREE.Vector3(0.0, 0.40, -0.5),
+    fov:  32,
+  },
+  { // 0.52  ▸ VOORKANT — recht voor de fiets, dichterbij + lager + tightere zoom
+    //  Front van de bike = -Z (handlebar zit op -Z)
+    progress: 0.52,
+    pos:  new THREE.Vector3(0.0, 0.35, -2.1),
+    look: new THREE.Vector3(0.0, 0.40, -1.0),
+    fov:  22,
+  },
+  { // 0.58  ▸ PAUZE op voorkant zodat tekst leesbaar is
+    progress: 0.58,
+    pos:  new THREE.Vector3(0.0, 0.35, -2.1),
+    look: new THREE.Vector3(0.0, 0.40, -1.0),
+    fov:  22,
+  },
+  { // 0.66  ▸ BEAUTY ANGLE in — 3/4 front-right, dicht op de fiets
+    progress: 0.66,
+    pos:  new THREE.Vector3(1.20, 0.55, -1.30),
+    look: new THREE.Vector3(0.0, 0.42, -0.25),
+    fov:  28,
+  },
+  { // 0.78  ▸ BEAUTY ANGLE drift — continue trage beweging (geen stilstand)
+    //  ▸ camera zakt subtiel naar voren-onder en draait iets terug; ~14% scroll voor zachte drift
+    progress: 0.78,
+    pos:  new THREE.Vector3(1.40, 0.40, -1.00),
+    look: new THREE.Vector3(0.0, 0.35, -0.05),
+    fov:  26,
+  },
+  { // 0.79  ▸ ACCU arrive — ingezoomd op midden-zijkant (uitneembare batterij)
+    progress: 0.79,
+    pos:  new THREE.Vector3(1.05, 0.30, -0.15),
+    look: new THREE.Vector3(0.00, 0.20, -0.20),
+    fov:  28,
+  },
+  { // 0.84  ▸ ACCU HOLD — pauze
+    progress: 0.84,
+    pos:  new THREE.Vector3(1.05, 0.30, -0.15),
+    look: new THREE.Vector3(0.00, 0.20, -0.20),
+    fov:  28,
+  },
+  { // 0.88  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
+    progress: 0.88,
+    pos:  new THREE.Vector3(0.0, 0.20, 1.95),
+    look: new THREE.Vector3(0.0, 0.15, 0.55),
+    fov:  35,
+  },
+  { // 0.94  ▸ ACHTERKANT HOLD — pauze zodat tekst leesbaar blijft (~6% scroll)
+    progress: 0.94,
+    pos:  new THREE.Vector3(0.0, 0.20, 1.95),
+    look: new THREE.Vector3(0.0, 0.15, 0.55),
+    fov:  35,
+  },
+  { // 0.97  ▸ SLIDE — smooth glij-beweging laag over de fiets richting cockpit
+    //  ▸ NIET hoog overheen — dichtbij, voelt als een pan/slide ipv een opname-vlucht
+    progress: 0.97,
+    pos:  new THREE.Vector3(0.0, 0.95, 0.85),
+    look: new THREE.Vector3(0.0, 0.45, -0.10),
+    fov:  32,
+  },
+  { // 1.00  ▸ DISPLAY ZOOM (eind) — landt op cockpit, camera 30° naar links gedraaid
+    //  ▸ "iets minder eindigen" → wijdere FOV, iets verder weg ipv volledige close-up
+    //  ▸ 30° left = look-point ~tan(30°) * afstand naar -X verschoven
+    progress: 1.00,
+    pos:  new THREE.Vector3(0.25, 1.10, 0.20),
+    look: new THREE.Vector3(-0.30, 0.55, -0.45),
+    fov:  28,
+  },
+];
+
+/* ──── Pre-compute per-keyframe quaternions (zodat orient.-slerp exacte keyframe-poses hit) ──── */
+const _UP = new THREE.Vector3(0, 1, 0);
+const _m4 = new THREE.Matrix4();
+(function precomputeKeyframes(){
+  for (const kf of KEYFRAMES) {
+    _m4.lookAt(kf.pos, kf.look, _UP);
+    kf.quat = new THREE.Quaternion().setFromRotationMatrix(_m4);
+  }
+})();
+
+/* helper: zoek het juiste segment op basis van progress (variabele spacing) */
+const _camPos  = new THREE.Vector3();
+const _camLook = new THREE.Vector3();
+const _camQuat = new THREE.Quaternion();
+function camAt(progress) {
+  const p = Math.max(0, Math.min(1, progress));
+  let i = 0;
+  for (let k = 0; k < KEYFRAMES.length - 1; k++) {
+    if (p >= KEYFRAMES[k].progress && p <= KEYFRAMES[k+1].progress) { i = k; break; }
+    if (p > KEYFRAMES[k+1].progress) i = k + 1;
+  }
+  const a = KEYFRAMES[i];
+  const b = KEYFRAMES[Math.min(i + 1, KEYFRAMES.length - 1)];
+  const span = Math.max(0.0001, b.progress - a.progress);
+  const lt   = (p - a.progress) / span;
+  // lineair binnen segment — globale easing komt van scrub/Lenis (geen dubbele easing meer)
+  const e    = lt;
+  // directe lerp tussen keyframes — keyframe-posities worden exact getroffen
+  _camPos .lerpVectors(a.pos,  b.pos,  e);
+  _camLook.lerpVectors(a.look, b.look, e);
+  // quaternion slerp tussen pre-berekende oriëntaties (geen lookAt-snap)
+  _camQuat.slerpQuaternions(a.quat, b.quat, e);
+  const fov = a.fov + (b.fov - a.fov) * e;
+  return { pos: _camPos, look: _camLook, quat: _camQuat, fov };
+}
+
+/* override van het render-loop: gebruik camera direct, niet via state. */
+const _origTick = tick;
+let scrollProgress = 0;
+(function overrideTick(){
+  // niets — bestaande tick blijft draaien, maar we negeren state en plaatsen
+  // de camera elke frame zelf via een aparte ticker:
+})();
+let _lastProgress = -1;
+gsap.ticker.add(() => {
+  if (scrollProgress === _lastProgress) return;
+  _lastProgress = scrollProgress;
+  const c = camAt(scrollProgress);
+  camera.position.copy(c.pos);
+  camera.quaternion.copy(c.quat);
+  if (camera.fov !== c.fov) { camera.fov = c.fov; camera.updateProjectionMatrix(); }
+  invalidate();
+});
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ TEKST-OVERLAYS gekoppeld aan scroll-progress ranges
+   ────────────────────────────────────────────────────────── */
+const PANEL_RANGES = [
+  { id: 'intro',   selector: '#intro-overlay',                       from: 0.00, to: 0.15, label: 'Intro',      num: '01' },
+  { id: 'side',    selector: null,                                   from: 0.28, to: 0.40, label: 'Side view',  num: '02' },
+  { id: 'front',   selector: '.spec-panel[data-panel="front"]',      from: 0.50, to: 0.62, label: 'Front light',num: '03' },
+  { id: 'beauty',  selector: null,                                   from: 0.64, to: 0.78, label: 'Beauty',     num: '04' },
+  { id: 'battery', selector: '.spec-panel[data-panel="battery"]',    from: 0.78, to: 0.86, label: 'Energy',     num: '05' },
+  { id: 'rear',    selector: '.spec-panel[data-panel="rear"]',       from: 0.87, to: 0.95, label: 'Visibility', num: '06' },
+  { id: 'slide',   selector: null,                                   from: 0.95, to: 0.985,label: 'Slide',      num: '07' },
+  { id: 'logo',    selector: '#display-logo',                        from: 0.985,to: 1.01, label: 'MOEVS',      num: '08' },
+];
+
+// helper voor zachte fade-curve
+const smoothstep = (x, a, b) => {
+  const t = Math.max(0, Math.min(1, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+
+const sceneNum   = document.getElementById('scene-num');
+const sceneName  = document.getElementById('scene-name');
+const progressEls = [...document.querySelectorAll('.progress__step')];
+
+ScrollTrigger.create({
+  trigger: '.scene-container',
+  start: 'top top',
+  end: 'bottom bottom',
+  scrub: true,
+  onUpdate: (self) => {
+    const p = self.progress;
+    scrollProgress = p;
+
+    // Welk panel is actief?
+    let active = null;
+    for (const r of PANEL_RANGES) {
+      if (p >= r.from && p < r.to) { active = r; break; }
+    }
+
+    // Toggle alle panels
+    for (const r of PANEL_RANGES) {
+      if (!r.selector) continue;
+      const el = document.querySelector(r.selector);
+      if (!el) continue;
+      el.classList.toggle('active', active && active.id === r.id);
+    }
+
+    // Scene-label linksboven
+    if (active) {
+      sceneNum.textContent  = active.num;
+      sceneName.textContent = active.label;
+    }
+
+    // Progress-bullets rechts
+    const stepIndex = active ? PANEL_RANGES.indexOf(active) : -1;
+    progressEls.forEach((el, i) => el.classList.toggle('active', i === stepIndex));
+  },
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+node_modules/
+desktop.ini
+*.log
+inspect-output.txt
+optimize-output.txt
+
+# Ongebruikte GLB-varianten (alleen bike.glb wordt geladen)
+bike-aggressive-20.glb
+bike-aggressive-30.glb
+bike-aggressive-50.glb
+bike-draco.glb
+bike-meshopt.glb
+bike-notex.glb
+bike-optimized.glb
+bike-stage1.glb
+bike-tex1024.glb
+bike-tex2048.glb
+bike-tex512.glb
+website model F1.glb
