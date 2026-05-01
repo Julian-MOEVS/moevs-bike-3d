@@ -1087,97 +1087,91 @@ const KEYFRAMES = [
     look: TARGETS.stem007,
     fov:  30,
   },
-  { // 0.18  ▸ houd start vast tijdens titel-intro (subtiele drift naar achter)
-    progress: 0.18,
+  { // 0.10  ▸ houd start vast tijdens titel-intro (subtiele drift naar achter)
+    progress: 0.10,
     pos:  new THREE.Vector3(0.05, 0.95, 0.85),
     look: TARGETS.stem007,
     fov:  30,
   },
-  { // 0.32  ▸ ZIJKANT — volledige side-view van rechts
-    progress: 0.32,
+  { // 0.20  ▸ ZIJKANT — volledige side-view van rechts
+    progress: 0.20,
     pos:  new THREE.Vector3(2.9, 0.30, 0.0),
     look: new THREE.Vector3(0.0, 0.20, 0.0),
     fov:  32,
   },
-  { // 0.42  ▸ ORBIT — kwart om de fiets, halverwege tussen zij en voor
-    //  +X / -Z corner, blijft op gelijke hoogte
-    progress: 0.42,
+  { // 0.28  ▸ ORBIT — kwart om de fiets, halverwege tussen zij en voor
+    progress: 0.28,
     pos:  new THREE.Vector3(2.05, 0.42, -2.05),
     look: new THREE.Vector3(0.0, 0.40, -0.5),
     fov:  32,
   },
-  { // 0.52  ▸ VOORKANT — recht voor de fiets, dichterbij + lager + tightere zoom
-    //  Front van de bike = -Z (handlebar zit op -Z)
-    progress: 0.52,
+  { // 0.36  ▸ VOORKANT — recht voor de fiets
+    progress: 0.36,
     pos:  new THREE.Vector3(0.0, 0.35, -2.1),
     look: new THREE.Vector3(0.0, 0.40, -1.0),
     fov:  22,
   },
-  { // 0.58  ▸ PAUZE op voorkant zodat tekst leesbaar is
-    progress: 0.58,
+  { // 0.42  ▸ PAUZE op voorkant zodat tekst leesbaar is
+    progress: 0.42,
     pos:  new THREE.Vector3(0.0, 0.35, -2.1),
     look: new THREE.Vector3(0.0, 0.40, -1.0),
     fov:  22,
   },
-  { // 0.66  ▸ BEAUTY ANGLE in — 3/4 front-right, dicht op de fiets
-    progress: 0.66,
+  { // 0.50  ▸ BEAUTY ANGLE in — 3/4 front-right
+    progress: 0.50,
     pos:  new THREE.Vector3(1.20, 0.55, -1.30),
     look: new THREE.Vector3(0.0, 0.42, -0.25),
     fov:  28,
   },
-  { // 0.78  ▸ BEAUTY ANGLE drift — continue trage beweging (geen stilstand)
-    //  ▸ camera zakt subtiel naar voren-onder en draait iets terug; ~14% scroll voor zachte drift
-    progress: 0.78,
+  { // 0.58  ▸ BEAUTY ANGLE drift
+    progress: 0.58,
     pos:  new THREE.Vector3(1.40, 0.40, -1.00),
     look: new THREE.Vector3(0.0, 0.35, -0.05),
     fov:  26,
   },
-  { // 0.79  ▸ ACCU arrive — ingezoomd op midden-zijkant (uitneembare batterij)
-    progress: 0.79,
+  { // 0.62  ▸ ACCU arrive — ingezoomd op midden-zijkant (uitneembare batterij)
+    progress: 0.62,
     pos:  new THREE.Vector3(1.05, 0.30, -0.15),
     look: new THREE.Vector3(0.00, 0.20, -0.20),
     fov:  28,
   },
-  { // 0.84  ▸ ACCU HOLD — pauze
-    progress: 0.84,
+  { // 0.68  ▸ ACCU HOLD — pauze
+    progress: 0.68,
     pos:  new THREE.Vector3(1.05, 0.30, -0.15),
     look: new THREE.Vector3(0.00, 0.20, -0.20),
     fov:  28,
   },
-  { // 0.87  ▸ BEAUTY REAR in — vloeiende orbit van accu naar achterkant
-    //  ▸ Monotone Z-progressie (-0.15 → 1.40 → 2.00 → 1.95), Y blijft laag
-    progress: 0.87,
+  { // 0.78  ▸ BEAUTY REAR in — vloeiende orbit van accu naar achterkant
+    progress: 0.78,
     pos:  new THREE.Vector3(2.30, 0.45,  1.40),
     look: new THREE.Vector3(0.0,  0.30,  0.30),
     fov:  38,
   },
-  { // 0.91  ▸ BEAUTY REAR drift — boog naar achterkant, X komt al binnen, Z verder
-    progress: 0.91,
+  { // 0.86  ▸ BEAUTY REAR drift — boog naar achterkant, X komt al binnen, Z verder
+    progress: 0.86,
     pos:  new THREE.Vector3(1.55, 0.38,  2.00),
     look: new THREE.Vector3(0.0,  0.25,  0.50),
     fov:  38,
   },
-  { // 0.93  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
-    progress: 0.93,
+  { // 0.92  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
+    progress: 0.92,
     pos:  new THREE.Vector3(0.0, 0.20, 1.95),
     look: new THREE.Vector3(0.0, 0.15, 0.55),
     fov:  35,
   },
-  { // 0.96  ▸ ACHTERKANT HOLD — pauze zodat tekst leesbaar blijft
-    progress: 0.96,
+  { // 0.95  ▸ ACHTERKANT HOLD — pauze zodat tekst leesbaar blijft
+    progress: 0.95,
     pos:  new THREE.Vector3(0.0, 0.20, 1.95),
     look: new THREE.Vector3(0.0, 0.15, 0.55),
     fov:  35,
   },
-  { // 0.98  ▸ SLIDE — smooth glij-beweging laag over de fiets richting cockpit
-    progress: 0.98,
+  { // 0.985  ▸ SLIDE — smooth glij-beweging laag over de fiets richting cockpit
+    progress: 0.985,
     pos:  new THREE.Vector3(0.0, 0.95, 0.85),
     look: new THREE.Vector3(0.0, 0.45, -0.10),
     fov:  32,
   },
   { // 1.00  ▸ DISPLAY ZOOM (eind) — landt op cockpit, camera 30° naar links gedraaid
-    //  ▸ "iets minder eindigen" → wijdere FOV, iets verder weg ipv volledige close-up
-    //  ▸ 30° left = look-point ~tan(30°) * afstand naar -X verschoven
     progress: 1.00,
     pos:  new THREE.Vector3(0.25, 1.10, 0.20),
     look: new THREE.Vector3(-0.30, 0.55, -0.45),
@@ -1243,13 +1237,13 @@ gsap.ticker.add(() => {
    ▸▸▸ TEKST-OVERLAYS gekoppeld aan scroll-progress ranges
    ────────────────────────────────────────────────────────── */
 const PANEL_RANGES = [
-  { id: 'intro',   selector: '#intro-overlay',                       from: 0.00, to: 0.15, label: 'Intro',      num: '01' },
-  { id: 'side',    selector: null,                                   from: 0.28, to: 0.40, label: 'Side view',  num: '02' },
-  { id: 'front',   selector: '.spec-panel[data-panel="front"]',      from: 0.50, to: 0.62, label: 'Front light',num: '03' },
-  { id: 'beauty',  selector: null,                                   from: 0.64, to: 0.78, label: 'Beauty',     num: '04' },
-  { id: 'battery',     selector: '.spec-panel[data-panel="battery"]', from: 0.78, to: 0.86, label: 'Energy',     num: '05' },
-  { id: 'beauty-rear', selector: null,                                from: 0.86, to: 0.92, label: 'Rear beauty',num: '06' },
-  { id: 'rear',        selector: '.spec-panel[data-panel="rear"]',    from: 0.92, to: 0.97, label: 'Visibility', num: '07' },
+  { id: 'intro',       selector: '#intro-overlay',                    from: 0.00, to: 0.10, label: 'Intro',      num: '01' },
+  { id: 'side',        selector: null,                                from: 0.16, to: 0.28, label: 'Side view',  num: '02' },
+  { id: 'front',       selector: '.spec-panel[data-panel="front"]',   from: 0.34, to: 0.46, label: 'Front light',num: '03' },
+  { id: 'beauty',      selector: null,                                from: 0.48, to: 0.60, label: 'Beauty',     num: '04' },
+  { id: 'battery',     selector: '.spec-panel[data-panel="battery"]', from: 0.60, to: 0.74, label: 'Energy',     num: '05' },
+  { id: 'beauty-rear', selector: null,                                from: 0.74, to: 0.90, label: 'Rear beauty',num: '06' },
+  { id: 'rear',        selector: '.spec-panel[data-panel="rear"]',    from: 0.90, to: 0.97, label: 'Visibility', num: '07' },
   { id: 'slide',       selector: null,                                from: 0.97, to: 0.99, label: 'Slide',      num: '08' },
   { id: 'logo',        selector: '#display-logo',                     from: 0.99, to: 1.01, label: 'MOEVS',      num: '09' },
 ];
