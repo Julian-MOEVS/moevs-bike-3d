@@ -1147,29 +1147,30 @@ const KEYFRAMES = [
     look: new THREE.Vector3(0.0,  0.30,  0.30),
     fov:  38,
   },
-  { // 0.86  ▸ BEAUTY REAR drift — boog naar achterkant, X komt al binnen, Z verder
-    progress: 0.86,
+  { // 0.84  ▸ BEAUTY REAR drift — eerder neergezet om eind meer ademruimte te geven
+    progress: 0.84,
     pos:  new THREE.Vector3(1.55, 0.38,  2.00),
     look: new THREE.Vector3(0.0,  0.25,  0.50),
     fov:  38,
   },
-  { // 0.92  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
-    progress: 0.92,
+  { // 0.88  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
+    progress: 0.88,
     pos:  new THREE.Vector3(0.0, 0.20, 1.95),
     look: new THREE.Vector3(0.0, 0.15, 0.55),
     fov:  35,
   },
-  { // 0.95  ▸ ACHTERKANT HOLD — pauze zodat tekst leesbaar blijft
+  { // 0.90  ▸ ACHTERKANT HOLD — korte pauze
+    progress: 0.90,
+    pos:  new THREE.Vector3(0.0, 0.20, 1.95),
+    look: new THREE.Vector3(0.0, 0.15, 0.55),
+    fov:  35,
+  },
+  { // 0.95  ▸ AERIAL — hoge boog ver boven de fiets, neerkijkend op de cockpit
+    //  ▸ veel hoger dan de oude slide (Y 0.95 → 2.30) zodat de fly-down naar display dramatischer voelt
     progress: 0.95,
-    pos:  new THREE.Vector3(0.0, 0.20, 1.95),
-    look: new THREE.Vector3(0.0, 0.15, 0.55),
-    fov:  35,
-  },
-  { // 0.985  ▸ SLIDE — smooth glij-beweging laag over de fiets richting cockpit
-    progress: 0.985,
-    pos:  new THREE.Vector3(0.0, 0.95, 0.85),
-    look: new THREE.Vector3(0.0, 0.45, -0.10),
-    fov:  32,
+    pos:  new THREE.Vector3(0.0, 2.30, 1.20),
+    look: new THREE.Vector3(0.0, 0.30, 0.00),
+    fov:  42,
   },
   { // 1.00  ▸ DISPLAY ZOOM (eind) — landt op cockpit, camera 30° naar links gedraaid
     progress: 1.00,
@@ -1242,10 +1243,10 @@ const PANEL_RANGES = [
   { id: 'front',       selector: '.spec-panel[data-panel="front"]',   from: 0.34, to: 0.46, label: 'Front light',num: '03' },
   { id: 'beauty',      selector: null,                                from: 0.48, to: 0.60, label: 'Beauty',     num: '04' },
   { id: 'battery',     selector: '.spec-panel[data-panel="battery"]', from: 0.60, to: 0.74, label: 'Energy',     num: '05' },
-  { id: 'beauty-rear', selector: null,                                from: 0.74, to: 0.90, label: 'Rear beauty',num: '06' },
-  { id: 'rear',        selector: '.spec-panel[data-panel="rear"]',    from: 0.90, to: 0.97, label: 'Visibility', num: '07' },
-  { id: 'slide',       selector: null,                                from: 0.97, to: 0.99, label: 'Slide',      num: '08' },
-  { id: 'logo',        selector: '#display-logo',                     from: 0.99, to: 1.01, label: 'MOEVS',      num: '09' },
+  { id: 'beauty-rear', selector: null,                                from: 0.74, to: 0.86, label: 'Rear beauty',num: '06' },
+  { id: 'rear',        selector: '.spec-panel[data-panel="rear"]',    from: 0.86, to: 0.92, label: 'Visibility', num: '07' },
+  { id: 'aerial',      selector: null,                                from: 0.92, to: 0.98, label: 'Fly-over',   num: '08' },
+  { id: 'logo',        selector: '#display-logo',                     from: 0.98, to: 1.01, label: 'MOEVS',      num: '09' },
 ];
 
 // helper voor zachte fade-curve
