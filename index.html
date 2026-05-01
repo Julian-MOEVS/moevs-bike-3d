@@ -523,16 +523,119 @@ body::after {
    11. RESPONSIVE
    ────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav { padding: 18px 20px; }
+  .nav { padding: 16px 18px; }
   .nav__menu { display: none; }
-  .hero { padding: 0 20px 60px; }
-  .progress { right: 16px; gap: 16px; }
+  .nav__cta { font-size: 10px; padding: 8px 14px; letter-spacing: 0.16em; }
+
+  /* HERO — terughoudender op kleine schermen */
+  .hero { padding: 0 20px 80px; }
+  .hero__eyebrow { font-size: 10px; letter-spacing: 0.24em; margin-bottom: 22px; }
+  .hero__title {
+    font-size: clamp(44px, 14vw, 88px);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .hero__sub { font-size: 13px; line-height: 1.55; margin-bottom: 40px; padding: 0 6px; }
+  .hero__hint { font-size: 9px; letter-spacing: 0.24em; bottom: 24px; }
+
+  /* SCENE / PROGRESS */
+  .progress { right: 14px; gap: 14px; }
   .progress__step .label { display: none; }
-  .scene-label { left: 20px; top: 90px; font-size: 10px; }
-  .spec-panel--tl, .spec-panel--bl { left: 20px; }
-  .spec-panel--tr, .spec-panel--br { right: 20px; }
-  .spec-panel { max-width: 78vw; }
-  .spec-panel__stats { gap: 20px; }
+  .progress__step .dot { width: 6px; height: 6px; }
+  .scene-label { left: 18px; top: 80px; font-size: 9px; letter-spacing: 0.22em; }
+  .scene-label::before { width: 16px; }
+
+  /* INTRO overlay */
+  .intro__eyebrow { font-size: 9px; letter-spacing: 0.24em; margin-bottom: 18px; }
+  .intro__eyebrow::before, .intro__eyebrow::after { width: 18px; }
+  .intro__title {
+    font-size: clamp(40px, 13vw, 78px);
+    line-height: 0.95;
+    margin-bottom: 14px;
+  }
+  .intro__sub { font-size: clamp(15px, 3.6vw, 20px); line-height: 1.35; max-width: 22ch; }
+
+  /* SPEC-PANELS — bottom-drawer i.p.v. zijpaneel */
+  .spec-panel,
+  .spec-panel--tl,
+  .spec-panel--tr,
+  .spec-panel--bl,
+  .spec-panel--br {
+    top: auto !important;
+    bottom: 90px !important;
+    left: 20px !important;
+    right: 20px !important;
+    max-width: none;
+    width: calc(100% - 40px);
+    text-align: left;
+    padding: 18px 20px;
+    background: rgba(14,14,14,0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+  }
+  .spec-panel__eyebrow { font-size: 9px; letter-spacing: 0.22em; margin-bottom: 10px; flex-direction: row !important; }
+  .spec-panel__eyebrow::before { width: 14px; }
+  .spec-panel__head {
+    font-size: clamp(22px, 6vw, 30px);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .spec-panel__body {
+    font-size: 12px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+    max-width: none;
+    color: var(--fg-dim);
+    /* clamp tot 3 regels op mobiel */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .spec-panel__stats { gap: 24px; padding-top: 14px; justify-content: flex-start !important; }
+  .spec-panel__stat .lbl { font-size: 8px; letter-spacing: 0.2em; }
+  .spec-panel__stat .val { font-size: 22px; }
+  .spec-panel__stat .val sup { font-size: 10px; }
+
+  /* DISPLAY logo iets kleiner */
+  .display-logo img { height: 56px; }
+
+  /* DETAILS */
+  .details__head { gap: 14px; }
+  .details__eyebrow { font-size: 10px; letter-spacing: 0.24em; }
+  .details__title { font-size: clamp(34px, 9vw, 52px); }
+  .spec-row { padding: 16px 0; gap: 14px; }
+  .spec-row dt { font-size: 15px; }
+  .spec-row dd { font-size: 12px; }
+
+  /* EVERYONE */
+  .everyone__title { font-size: clamp(34px, 9vw, 60px); }
+  .everyone__sub { font-size: 11px; letter-spacing: 0.22em; }
+
+  /* OUTRO */
+  .outro { padding: 100px 20px; }
+  .outro__title { font-size: clamp(36px, 9vw, 60px); margin-bottom: 28px; }
+  .outro__cta-row { gap: 12px; }
+  .btn { padding: 14px 22px; font-size: 10px; letter-spacing: 0.18em; }
+  .outro__meta { margin-top: 50px; gap: 20px; flex-wrap: wrap; justify-content: center; }
+}
+
+/* ── Extra-small phones ─────────────────────────────────── */
+@media (max-width: 480px) {
+  .hero__title { font-size: clamp(40px, 13vw, 64px); }
+  .intro__title { font-size: clamp(34px, 12vw, 56px); }
+  .spec-panel { bottom: 80px !important; }
+  .spec-panel__head { font-size: 20px; }
+  .spec-panel__body { font-size: 11.5px; -webkit-line-clamp: 2; }
+  .progress { right: 10px; gap: 12px; }
+  .scene-label { top: 70px; }
+  .details__title { font-size: clamp(28px, 9vw, 40px); }
+  .outro__title { font-size: clamp(30px, 8.5vw, 44px); }
+  .everyone__title { font-size: clamp(28px, 8.5vw, 44px); }
+  .footer__tagline { font-size: clamp(22px, 6vw, 30px); }
 }
 </style>
 </head>
