@@ -1145,17 +1145,17 @@ const KEYFRAMES = [
     fov:  28,
   },
   { // 0.87  ▸ BEAUTY REAR in — zelfde curve als front-beauty, gespiegeld naar achter (+Z)
-    //  ▸ 3/4 rear-right hoek, dicht op de fiets
+    //  ▸ 3/4 rear-right hoek, ruimer kader (verder weg + wijdere FOV)
     progress: 0.87,
-    pos:  new THREE.Vector3(1.20, 0.55,  1.30),
-    look: new THREE.Vector3(0.0,  0.42,  0.25),
-    fov:  28,
+    pos:  new THREE.Vector3(2.10, 0.85,  2.30),
+    look: new THREE.Vector3(0.0,  0.40,  0.20),
+    fov:  40,
   },
-  { // 0.91  ▸ BEAUTY REAR drift — continue trage zak, mirror van front-beauty
+  { // 0.91  ▸ BEAUTY REAR drift — trage zak, ruim kader behouden
     progress: 0.91,
-    pos:  new THREE.Vector3(1.40, 0.40,  1.00),
-    look: new THREE.Vector3(0.0,  0.35,  0.05),
-    fov:  26,
+    pos:  new THREE.Vector3(2.40, 0.65,  1.85),
+    look: new THREE.Vector3(0.0,  0.32,  0.00),
+    fov:  38,
   },
   { // 0.93  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
     progress: 0.93,
