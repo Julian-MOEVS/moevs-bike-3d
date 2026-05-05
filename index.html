@@ -196,9 +196,15 @@ body::after {
 }
 .scene-pin {
   position: sticky; top: 0;
-  height: 100vh; width: 100%;
+  height: 100vh;
+  height: 100svh;            /* mobiele dynamische viewport — voorkomt afgekapte scroll */
+  width: 100%;
   overflow: hidden;
   background: transparent;
+}
+@media (max-width: 768px) {
+  /* Korter op mobiel zodat de scroll comfortabel afmaakt */
+  .scene-container { height: 700vh; }
 }
 /* grid in de scene — wit, 5% opacity, ALTIJD achter de fiets */
 .scene-grid {
@@ -232,16 +238,15 @@ body::after {
 /* CORNER-TEKST — verschijnt op intro, fade-out bij scroll */
 .corner-text {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   max-width: 540px;
   z-index: 9;
   pointer-events: none;
   transition: opacity .35s ease, transform .45s ease;
   color: var(--fg);
 }
-.corner-text--bl { left: 56px; text-align: left; }
-.corner-text--br { right: 56px; text-align: right; }
+/* BL = linksboven, BR = rechtsonder — diagonale opstelling */
+.corner-text--bl { top: 120px; left: 56px; text-align: left; }
+.corner-text--br { bottom: 80px; right: 56px; text-align: right; }
 .corner-text__eyebrow {
   font-size: 14px; text-transform: uppercase; letter-spacing: 0.32em;
   color: var(--link); margin-bottom: 22px;
@@ -270,11 +275,11 @@ body::after {
   color: var(--fg-mute);
   animation: bob 2.4s ease-in-out infinite;
 }
-.corner-text.is-hidden { opacity: 0; transform: translateY(calc(-50% + 12px)); }
+.corner-text.is-hidden { opacity: 0; transform: translateY(12px); }
 @media (max-width: 768px) {
-  .corner-text { max-width: 47%; }
-  .corner-text--bl { left: 18px; }
-  .corner-text--br { right: 18px; }
+  .corner-text { max-width: 64%; }
+  .corner-text--bl { top: 80px; left: 18px; }
+  .corner-text--br { bottom: 32px; right: 18px; }
   .corner-text__eyebrow { font-size: 10px; letter-spacing: 0.24em; margin-bottom: 12px; }
   .corner-text__eyebrow::before { width: 22px; }
   .corner-text__title { font-size: 22px; margin-bottom: 12px; }
@@ -1208,17 +1213,19 @@ const TARGETS = {
 /* Camera-keyframes: elk keyframe heeft een eigen progress-waarde (0–1).
    Gelijke progress-waarden achter elkaar = pauze (camera blijft staan). */
 const KEYFRAMES = [
-  { // 0.00  ▸ START — top-down hero shot: camera bóven de fiets, naar beneden kijkend
+  { // 0.00  ▸ START — top-down hero shot, 90° met-de-klok-mee gedraaid
     progress: 0.00,
     pos:  new THREE.Vector3(0.0, 3.4, 0.6),
     look: new THREE.Vector3(0.0, 0.20, 0.0),
     fov:  40,
+    roll: -Math.PI / 2,
   },
   { // 0.10  ▸ subtiele drift voor hero (lichte parallax tijdens corner-tekst)
     progress: 0.10,
     pos:  new THREE.Vector3(0.15, 3.25, 0.85),
     look: new THREE.Vector3(0.0, 0.20, 0.0),
     fov:  38,
+    roll: -Math.PI / 2,
   },
   { // 0.20  ▸ ZIJKANT — volledige side-view van rechts
     progress: 0.20,
@@ -1310,10 +1317,16 @@ const KEYFRAMES = [
 /* ──── Pre-compute per-keyframe quaternions (zodat orient.-slerp exacte keyframe-poses hit) ──── */
 const _UP = new THREE.Vector3(0, 1, 0);
 const _m4 = new THREE.Matrix4();
+const _Z  = new THREE.Vector3(0, 0, 1);
+const _rollQ = new THREE.Quaternion();
 (function precomputeKeyframes(){
   for (const kf of KEYFRAMES) {
     _m4.lookAt(kf.pos, kf.look, _UP);
     kf.quat = new THREE.Quaternion().setFromRotationMatrix(_m4);
+    if (kf.roll) {
+      _rollQ.setFromAxisAngle(_Z, kf.roll);
+      kf.quat.multiply(_rollQ);
+    }
   }
 })();
 
