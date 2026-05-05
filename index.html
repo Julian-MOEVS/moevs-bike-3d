@@ -56,7 +56,7 @@ html, body { color: var(--fg); }
 /* Zachte wit → licht-grijs verloop over de hele pagina (alleen de 3D-scene heeft eigen achtergrond) */
 body {
   background:
-    linear-gradient(180deg, #ffffff 0%, #f3f4f7 45%, #eceef3 100%) fixed;
+    linear-gradient(180deg, #ffffff 0%, #eef1f6 40%, #dde2eb 75%, #cdd4e0 100%) fixed;
 }
 body {
   font-family: var(--mono);
@@ -1259,19 +1259,19 @@ const KEYFRAMES = [
     fov:  38,
     roll: Math.PI / 2,
   },
-  { // 0.13  ▸ UN-ROLL — camera richt zich op zonder grote positie-sprong
-    progress: 0.13,
-    pos:  new THREE.Vector3(0.50, 3.00, 1.20),
-    look: new THREE.Vector3(0.0, 0.30, 0.0),
+  { // 0.12  ▸ DOLLY BACK + DOWN — camera trekt naar achter (+Z) en daalt, blijft naar de fiets kijken
+    progress: 0.12,
+    pos:  new THREE.Vector3(0.0, 2.30, 2.20),
+    look: new THREE.Vector3(0.0, 0.40, 0.0),
     fov:  36,
   },
-  { // 0.17  ▸ DESCEND — vloeiende boog van bovenaf naar rechterzijde
+  { // 0.17  ▸ LOW BEHIND — verder naar achter, lager bij de grond, look-dir kantelt langzaam horizontaal
     progress: 0.17,
-    pos:  new THREE.Vector3(1.80, 1.60, 1.50),
-    look: new THREE.Vector3(0.0, 0.25, 0.0),
+    pos:  new THREE.Vector3(0.30, 0.90, 3.10),
+    look: new THREE.Vector3(0.0, 0.50, 0.0),
     fov:  34,
   },
-  { // 0.22  ▸ ZIJKANT — volledige side-view van rechts
+  { // 0.22  ▸ PITCH UP NAAR ZIJKANT — eindigt op side-view van rechts (90° pitch t.o.v. start)
     progress: 0.22,
     pos:  new THREE.Vector3(2.9, 0.30, 0.0),
     look: new THREE.Vector3(0.0, 0.20, 0.0),
