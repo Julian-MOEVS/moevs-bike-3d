@@ -218,36 +218,37 @@ body::after {
 /* CORNER-TEKST — verschijnt op intro, fade-out bij scroll */
 .corner-text {
   position: absolute;
-  bottom: 80px;
-  max-width: 480px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 540px;
   z-index: 9;
   pointer-events: none;
-  transition: opacity .35s ease, transform .35s ease;
+  transition: opacity .35s ease, transform .45s ease;
   color: var(--fg);
 }
 .corner-text--bl { left: 56px; text-align: left; }
 .corner-text--br { right: 56px; text-align: right; }
 .corner-text__eyebrow {
-  font-size: 13px; text-transform: uppercase; letter-spacing: 0.32em;
-  color: var(--link); margin-bottom: 18px;
-  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; text-transform: uppercase; letter-spacing: 0.32em;
+  color: var(--link); margin-bottom: 22px;
+  display: flex; align-items: center; gap: 14px;
   font-weight: 500;
 }
 .corner-text--br .corner-text__eyebrow { justify-content: flex-end; }
 .corner-text__eyebrow::before {
-  content: ''; width: 32px; height: 1px; background: currentColor;
+  content: ''; width: 40px; height: 1px; background: currentColor;
 }
 .corner-text--br .corner-text__eyebrow { flex-direction: row-reverse; }
 .corner-text__title {
   font-family: var(--serif); font-style: normal; font-weight: 400;
-  font-size: clamp(28px, 2.8vw, 42px);
-  line-height: 1.05; letter-spacing: -0.02em;
-  margin-bottom: 16px;
+  font-size: clamp(40px, 4.2vw, 64px);
+  line-height: 1.02; letter-spacing: -0.025em;
+  margin-bottom: 22px;
 }
 .corner-text__title em { font-style: italic; font-weight: 300; opacity: 0.9; }
 .corner-text__body {
-  font-size: 14px; line-height: 1.55; color: var(--fg-dim);
-  letter-spacing: 0.02em;
+  font-size: 16px; line-height: 1.55; color: var(--fg-dim);
+  letter-spacing: 0.01em;
 }
 .corner-text__hint {
   display: inline-block; margin-top: 16px;
@@ -255,16 +256,16 @@ body::after {
   color: var(--fg-mute);
   animation: bob 2.4s ease-in-out infinite;
 }
-.corner-text.is-hidden { opacity: 0; transform: translateY(8px); }
+.corner-text.is-hidden { opacity: 0; transform: translateY(calc(-50% + 12px)); }
 @media (max-width: 768px) {
-  .corner-text { bottom: 32px; max-width: 47%; }
+  .corner-text { max-width: 47%; }
   .corner-text--bl { left: 18px; }
   .corner-text--br { right: 18px; }
-  .corner-text__eyebrow { font-size: 10px; letter-spacing: 0.24em; margin-bottom: 10px; }
-  .corner-text__eyebrow::before { width: 18px; }
-  .corner-text__title { font-size: 18px; margin-bottom: 8px; }
-  .corner-text__body { font-size: 11px; }
-  .corner-text__hint { font-size: 9px; margin-top: 8px; }
+  .corner-text__eyebrow { font-size: 10px; letter-spacing: 0.24em; margin-bottom: 12px; }
+  .corner-text__eyebrow::before { width: 22px; }
+  .corner-text__title { font-size: 22px; margin-bottom: 12px; }
+  .corner-text__body { font-size: 12px; }
+  .corner-text__hint { font-size: 9px; margin-top: 10px; }
 }
 /* In de zwarte 3D-scene weer lichte tekst gebruiken */
 .scene-container .scene-label { color: var(--scene-fg-dim); }
@@ -319,7 +320,11 @@ body::after {
   position: absolute; top: 50%; right: 40px; transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 22px;
   z-index: 10;
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
 }
+.progress.is-visible { opacity: 1; pointer-events: auto; }
 .progress__step {
   display: flex; align-items: center; gap: 14px;
   cursor: pointer;
@@ -1385,6 +1390,10 @@ ScrollTrigger.create({
     const hide = p > 0.015;
     cornerBL.classList.toggle('is-hidden', hide);
     cornerBR.classList.toggle('is-hidden', hide);
+
+    // ▸ Progress-bollen verschijnen pas zodra je scrollt
+    const progressEl = document.getElementById('progress');
+    if (progressEl) progressEl.classList.toggle('is-visible', p > 0.015);
 
     // Welk panel is actief?
     let active = null;
