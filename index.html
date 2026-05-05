@@ -1252,15 +1252,27 @@ const KEYFRAMES = [
     fov:  40,
     roll: Math.PI / 2,
   },
-  { // 0.10  ▸ subtiele drift voor hero (lichte parallax tijdens corner-tekst)
-    progress: 0.10,
+  { // 0.08  ▸ subtiele drift voor hero (lichte parallax tijdens corner-tekst)
+    progress: 0.08,
     pos:  new THREE.Vector3(0.15, 3.25, 0.85),
     look: new THREE.Vector3(0.0, 0.20, 0.0),
     fov:  38,
     roll: Math.PI / 2,
   },
-  { // 0.20  ▸ ZIJKANT — volledige side-view van rechts
-    progress: 0.20,
+  { // 0.13  ▸ UN-ROLL — camera richt zich op zonder grote positie-sprong
+    progress: 0.13,
+    pos:  new THREE.Vector3(0.50, 3.00, 1.20),
+    look: new THREE.Vector3(0.0, 0.30, 0.0),
+    fov:  36,
+  },
+  { // 0.17  ▸ DESCEND — vloeiende boog van bovenaf naar rechterzijde
+    progress: 0.17,
+    pos:  new THREE.Vector3(1.80, 1.60, 1.50),
+    look: new THREE.Vector3(0.0, 0.25, 0.0),
+    fov:  34,
+  },
+  { // 0.22  ▸ ZIJKANT — volledige side-view van rechts
+    progress: 0.22,
     pos:  new THREE.Vector3(2.9, 0.30, 0.0),
     look: new THREE.Vector3(0.0, 0.20, 0.0),
     fov:  32,
