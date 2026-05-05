@@ -275,6 +275,36 @@ body::after {
   color: var(--fg-mute);
   animation: bob 2.4s ease-in-out infinite;
 }
+.corner-text__cta-row {
+  display: flex; gap: 12px;
+  margin-top: 24px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  pointer-events: auto;
+}
+.corner-text__btn {
+  display: inline-block;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.22em;
+  font-weight: 500;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: 1px solid var(--link);
+  transition: background .25s, color .25s, border-color .25s, transform .2s;
+  white-space: nowrap;
+}
+.corner-text__btn:hover { transform: translateY(-1px); }
+.corner-text__btn--primary {
+  background: var(--link); color: #fff; border-color: var(--link);
+}
+.corner-text__btn--primary:hover { background: var(--link-hover); border-color: var(--link-hover); }
+.corner-text__btn--ghost {
+  background: transparent; color: var(--fg); border-color: var(--line);
+}
+.corner-text__btn--ghost:hover { border-color: var(--fg); }
+@media (max-width: 768px) {
+  .corner-text__cta-row { gap: 8px; margin-top: 16px; }
+  .corner-text__btn { padding: 11px 18px; font-size: 10px; letter-spacing: 0.18em; }
+}
 .corner-text.is-hidden { opacity: 0; transform: translateY(12px); }
 @media (max-width: 768px) {
   .corner-text { max-width: 64%; }
@@ -809,16 +839,17 @@ body::after {
     <!-- 3D canvas -->
     <canvas id="bike-canvas"></canvas>
 
-    <!-- HERO CORNER-TEKST (linksonder + rechtsonder) — fade-out bij scroll -->
+    <!-- HERO CORNER-TEKST (linksboven + rechtsonder) — fade-out bij scroll -->
     <div class="corner-text corner-text--bl" id="corner-bl">
-      <div class="corner-text__eyebrow">PROJECT ONE</div>
-      <div class="corner-text__title">First One — <em>Daily Driver.</em></div>
-      <div class="corner-text__body">Verwijderbare 360 Wh batterij · 250 W motor · geïntegreerde LED-verlichting.</div>
+      <div class="corner-text__eyebrow">MOEVS Bike</div>
+      <div class="corner-text__title">Your daily <em>driver.</em></div>
     </div>
     <div class="corner-text corner-text--br" id="corner-br">
-      <div class="corner-text__eyebrow">EINDHOVEN · NL</div>
-      <div class="corner-text__title">Engineered for <em>the quiet ride.</em></div>
-      <div class="corner-text__body">Voor iedereen, elke dag.<br/><span class="corner-text__hint">Scroll to explore ↓</span></div>
+      <div class="corner-text__title">The ultimate <em>urban e-bike.</em></div>
+      <div class="corner-text__cta-row">
+        <a href="https://moevs.bike/dealers/" class="corner-text__btn corner-text__btn--primary">MOEVS Bike dealers</a>
+        <a href="https://moevs.bike/" class="corner-text__btn corner-text__btn--ghost">Alle modellen</a>
+      </div>
     </div>
 
     <!-- progress indicator rechts (alleen dots, geen labels) -->
