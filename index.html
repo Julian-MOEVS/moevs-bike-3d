@@ -75,8 +75,20 @@ img { display: block; max-width: 100%; }
 /* ──────────────────────────────────────────────────────────
    3. PAGE BACKGROUND — grain + grid
    ────────────────────────────────────────────────────────── */
-/* Geen globale blueprint meer op de witte secties — grid leeft alleen in de 3D-scene */
-body::before { content: none; }
+/* Globale grid op de achtergrond — wit, 5% opacity */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 1;
+}
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -188,16 +200,16 @@ body::after {
   overflow: hidden;
   background: transparent;
 }
-/* blueprint grid in de scene — achter de fiets, op 10% opacity */
+/* grid in de scene — wit, 5% opacity */
 .scene-grid {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(to right, rgba(0,88,230,1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,88,230,1) 1px, transparent 1px),
-    linear-gradient(to right, rgba(0,88,230,0.5) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,88,230,0.5) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px);
   background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
-  opacity: 0.18;
+  opacity: 0.05;
   pointer-events: none;
   z-index: 1;
 }
