@@ -706,41 +706,17 @@ body::after {
 .preloader__br .skel--row { display: flex; gap: 12px; margin-top: 12px; }
 .preloader__br .skel--btn { height: 46px; width: 200px; border-radius: 999px; }
 
-/* Centrale fiets-silhouet placeholder */
-.preloader__center {
+/* MOEVS-logo gecentreerd, met zachte pulse */
+.preloader__logo {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 360px; height: 200px;
-  display: flex; align-items: center; justify-content: center; gap: 28px;
-  opacity: 0.55;
-}
-.preloader__center .skel--wheel {
-  width: 130px; height: 130px;
-  border-radius: 50%;
-  background: transparent;
-  border: 12px solid rgba(0,0,0,0.10);
+  display: flex; align-items: center; justify-content: center;
   animation: skeleton-pulse 1.8s ease-in-out infinite;
 }
-@keyframes skeleton-pulse { 0%,100% { opacity: 0.55; } 50% { opacity: 0.85; } }
-
-/* Onderin — voortgangsbalk en label */
-.preloader__bar {
-  position: absolute; left: 50%; bottom: 38px; transform: translateX(-50%);
-  width: 240px; height: 2px; background: rgba(0,0,0,0.08);
-  border-radius: 2px; overflow: hidden;
+.preloader__logo img {
+  height: 64px; width: auto; display: block;
+  filter: brightness(0);
 }
-.preloader__bar::after {
-  content: ''; position: absolute; inset: 0;
-  background: var(--link);
-  transform: scaleX(var(--p, 0.05));
-  transform-origin: left;
-  transition: transform .25s ease;
-}
-.preloader[data-progress="1"] .preloader__bar::after { transform: scaleX(1); }
-.preloader__label {
-  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
-  font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
-  color: var(--fg-mute);
-}
+@keyframes skeleton-pulse { 0%,100% { opacity: 0.55; } 50% { opacity: 0.95; } }
 
 @media (max-width: 768px) {
   .preloader__bl { top: 80px; left: 18px; gap: 12px; }
@@ -752,8 +728,7 @@ body::after {
   .preloader__br .skel--title-1 { height: 36px; width: 70vw; max-width: 320px; }
   .preloader__br .skel--title-2 { height: 36px; width: 55vw; max-width: 260px; }
   .preloader__br .skel--btn { height: 38px; width: 130px; }
-  .preloader__center { width: 220px; height: 130px; gap: 18px; }
-  .preloader__center .skel--wheel { width: 80px; height: 80px; border-width: 8px; }
+  .preloader__logo img { height: 44px; }
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -880,6 +855,10 @@ body::after {
 
 <!-- ── PRELOADER (skeleton screen) ─────────────────────── -->
 <div class="preloader" id="preloader">
+  <!-- MOEVS logo centraal -->
+  <div class="preloader__logo">
+    <img src="https://moevs.bike/wp-content/uploads/2024/02/logo.webp" alt="MOEVS Bike" />
+  </div>
   <!-- Hero linksboven skeleton -->
   <div class="preloader__bl">
     <div class="skel skel--eyebrow"></div>
@@ -896,14 +875,6 @@ body::after {
       <div class="skel skel--btn"></div>
     </div>
   </div>
-  <!-- Centrale fiets-placeholder (twee wielen) -->
-  <div class="preloader__center">
-    <div class="skel--wheel"></div>
-    <div class="skel--wheel"></div>
-  </div>
-  <!-- Voortgang -->
-  <div class="preloader__bar"></div>
-  <div class="preloader__label">Loading the ride…</div>
 </div>
 
 <!-- ── NAV ──────────────────────────────────────────────── -->
