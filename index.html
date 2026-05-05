@@ -16,18 +16,23 @@
    1. DESIGN TOKENS — pas accentkleur aan met --accent
    ────────────────────────────────────────────────────────── */
 :root {
-  /* ── MOEVS brand tokens (overgenomen uit moevs.bike Elementor + jkit) ── */
-  --bg:        #0e0e0e;        /* dark base */
-  --bg-soft:   #1E1E1E;        /* MOEVS dark surface */
-  --fg:        #ffffff;
-  --fg-dim:    #b8b8b8;
-  --fg-mute:   #7A7A7A;        /* Elementor --e-global-color-text */
-  --line:      #2a2a2a;
-  --accent:    #ffffff;        /* primaire CTA — wit op donker, MOEVS-stijl */
-  --accent-dim:#c8c8c8;
-  --link:      #0058E6;        /* jkit link/button blue */
+  /* ── MOEVS brand tokens — WHITE base met blauwdruk overlay ── */
+  --bg:        #ffffff;        /* light base */
+  --bg-soft:   #f4f6fa;        /* zachte off-white surface */
+  --fg:        #0e0e0e;
+  --fg-dim:    #4a4a4a;
+  --fg-mute:   #8a8a8a;
+  --line:      #d8dde4;
+  --accent:    #0e0e0e;        /* primaire accent — donker op wit */
+  --accent-dim:#2a2a2a;
+  --link:      #0058E6;        /* blauwdruk-blauw */
   --link-hover:#0048BD;
-  --overlay:   #00000033;      /* MOEVS hero-overlay (rgba 0,0,0,0.2) */
+  --overlay:   #00000008;      /* hero-overlay zeer subtiel op wit */
+  --scene-bg:  #0e0e0e;        /* 3D-scene blijft zwart */
+  --scene-fg:  #ffffff;
+  --scene-fg-dim: #b8b8b8;
+  --scene-fg-mute:#7A7A7A;
+  --scene-line:#2a2a2a;
 
   /* MOEVS-Elementor variabelen (compatibel benoemd) */
   --e-color-primary:   #6EC1E4;
@@ -65,13 +70,17 @@ img { display: block; max-width: 100%; }
 /* ──────────────────────────────────────────────────────────
    3. PAGE BACKGROUND — grain + grid
    ────────────────────────────────────────────────────────── */
+/* Blauwdruk-grid op 10% opacity — zichtbaar over alle witte secties */
 body::before {
   content: '';
   position: fixed; inset: 0;
   background-image:
-    linear-gradient(to right, rgba(255,255,255,.018) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,.018) 1px, transparent 1px);
-  background-size: 80px 80px;
+    linear-gradient(to right, rgba(0,88,230,1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,88,230,1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0,88,230,0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,88,230,0.5) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  opacity: 0.10;
   pointer-events: none;
   z-index: 1;
 }
@@ -79,7 +88,7 @@ body::after {
   content: '';
   position: fixed; inset: 0;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
-  opacity: 0.08;
+  opacity: 0.025;
   pointer-events: none;
   z-index: 2;
 }
@@ -178,12 +187,96 @@ body::after {
   position: relative;
   height: 1200vh;           /* totale scroll-lengte = 12 schermen — extra traag voor focus en laad-buffer */
   z-index: 6;
+  color: var(--scene-fg);
 }
 .scene-pin {
   position: sticky; top: 0;
   height: 100vh; width: 100%;
   overflow: hidden;
+  background: transparent;
 }
+/* fade-laag onder canvas: start wit, gaat naar zwart via JS-variabele --fade */
+.scene-bg-fade {
+  position: absolute; inset: 0;
+  background: #ffffff;
+  /* --fade: 0 (wit) → 1 (zwart), gezet via JS */
+  background-color: rgb(
+    calc(255 - 255 * var(--fade, 0)),
+    calc(255 - 255 * var(--fade, 0)),
+    calc(255 - 255 * var(--fade, 0))
+  );
+  transition: background-color .25s linear;
+  z-index: 0;
+  pointer-events: none;
+}
+/* CORNER-TEKST — verschijnt op intro, fade-out bij scroll */
+.corner-text {
+  position: absolute;
+  bottom: 64px;
+  max-width: 320px;
+  z-index: 9;
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+  color: var(--fg);
+}
+.corner-text--bl { left: 40px; text-align: left; }
+.corner-text--br { right: 40px; text-align: right; }
+.corner-text__eyebrow {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.32em;
+  color: var(--link); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.corner-text--br .corner-text__eyebrow { justify-content: flex-end; }
+.corner-text__eyebrow::before {
+  content: ''; width: 24px; height: 1px; background: currentColor;
+}
+.corner-text--br .corner-text__eyebrow { flex-direction: row-reverse; }
+.corner-text__title {
+  font-family: var(--serif); font-style: normal; font-weight: 400;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.15; letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.corner-text__title em { font-style: italic; font-weight: 300; opacity: 0.85; }
+.corner-text__body {
+  font-size: 11px; line-height: 1.55; color: var(--fg-dim);
+  letter-spacing: 0.02em;
+}
+.corner-text__hint {
+  display: inline-block; margin-top: 10px;
+  font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--fg-mute);
+  animation: bob 2.4s ease-in-out infinite;
+}
+.corner-text.is-hidden { opacity: 0; transform: translateY(8px); }
+@media (max-width: 768px) {
+  .corner-text { bottom: 28px; max-width: 46%; }
+  .corner-text--bl { left: 18px; }
+  .corner-text--br { right: 18px; }
+  .corner-text__title { font-size: 14px; }
+  .corner-text__body { font-size: 10px; }
+}
+/* In de zwarte 3D-scene weer lichte tekst gebruiken */
+.scene-container .scene-label { color: var(--scene-fg-dim); }
+.scene-container .scene-label::before { background: var(--scene-fg); }
+.scene-container .scene-label__num { color: var(--scene-fg); }
+.scene-container .progress__step { color: var(--scene-fg-mute); }
+.scene-container .progress__step.active { color: var(--scene-fg); }
+.scene-container .progress__step.active .dot { background: var(--scene-fg); }
+.scene-container .rings__ring { border-color: var(--scene-line); }
+.scene-container .spec-panel__head { color: var(--scene-fg); }
+.scene-container .spec-panel__head em { color: var(--scene-fg); }
+.scene-container .spec-panel__body { color: var(--scene-fg-dim); }
+.scene-container .spec-panel__eyebrow { color: var(--scene-fg); }
+.scene-container .spec-panel__stats { border-top-color: var(--scene-line); }
+.scene-container .spec-panel__stat .lbl { color: var(--scene-fg-mute); }
+.scene-container .spec-panel__stat .val { color: var(--scene-fg); }
+.scene-container .spec-panel__stat .val sup { color: var(--scene-fg-dim); }
+.scene-container .intro__title { color: var(--scene-fg); }
+.scene-container .intro__title em { color: var(--scene-fg); }
+.scene-container .intro__sub { color: var(--scene-fg-dim); }
+.scene-container .intro__sub em { color: var(--scene-fg); }
+.scene-container .intro__eyebrow { color: var(--scene-fg); }
 #bike-canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
@@ -342,7 +435,7 @@ body::after {
    ────────────────────────────────────────────────────────── */
 .details {
   position: relative;
-  background: var(--bg-soft);
+  background: transparent;
   padding: 140px 40px;
   z-index: 5;
 }
@@ -403,7 +496,7 @@ body::after {
   position: relative;
   padding: 140px 40px;
   text-align: center;
-  background: var(--bg);
+  background: transparent;
   z-index: 5;
 }
 .everyone__title {
@@ -425,7 +518,7 @@ body::after {
    ────────────────────────────────────────────────────────── */
 .footer {
   position: relative;
-  background: var(--bg-soft);
+  background: transparent;
   padding: 100px 40px 32px;
   z-index: 5;
   border-top: 1px solid var(--line);
@@ -437,7 +530,7 @@ body::after {
   gap: 80px;
 }
 .footer__brand { display: flex; flex-direction: column; gap: 28px; }
-.footer__logo { height: 40px; width: auto; filter: brightness(0) invert(1); }
+.footer__logo { height: 40px; width: auto; filter: brightness(0); }
 .footer__tagline {
   font-family: var(--serif); font-weight: 500;
   font-size: clamp(28px, 3vw, 40px);
@@ -454,7 +547,7 @@ body::after {
   display: flex; gap: 0;
   border: 1px solid var(--line);
   border-radius: 999px; overflow: hidden;
-  background: var(--bg);
+  background: rgba(255,255,255,0.7);
 }
 .newsletter input {
   flex: 1; min-width: 0;
@@ -652,7 +745,7 @@ body::after {
   <a href="#" class="nav__brand">
     <img src="https://moevs.bike/wp-content/uploads/2024/02/logo.webp"
          alt="MOEVS Bike"
-         style="height:32px;width:auto;display:block;filter:brightness(0) invert(1);" />
+         style="height:32px;width:auto;display:block;filter:brightness(0) invert(1);" data-nav-logo />
   </a>
   <div class="nav__menu">
     <a href="#bikes">Bikes</a>
@@ -663,17 +756,12 @@ body::after {
   <a href="#reserve" class="nav__cta">Reserve →</a>
 </nav>
 
-<!-- ── HERO ─────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero__eyebrow">PROJECT ONE</div>
-  <h1 class="hero__title">YOUR <em>DAILY</em><br/>DRIVER.</h1>
-  <p class="hero__sub">De MOEVS First One — verwijderbare 360 Wh batterij, krachtige 250 W motor, geïntegreerde LED-verlichting. Voor iedereen, elke dag.</p>
-  <div class="hero__hint" id="hero-hint"><span>Scroll to explore</span></div>
-</section>
-
-<!-- ── PINNED SCENE ────────────────────────────────────── -->
+<!-- ── PINNED SCENE (start direct met de bike) ──────────── -->
 <section class="scene-container">
   <div class="scene-pin">
+
+    <!-- achtergrond fade-laag: wit → zwart tijdens scroll -->
+    <div class="scene-bg-fade" id="scene-bg-fade"></div>
 
     <!-- decoratieve ringen -->
     <div class="rings" id="rings">
@@ -684,6 +772,18 @@ body::after {
 
     <!-- 3D canvas -->
     <canvas id="bike-canvas"></canvas>
+
+    <!-- HERO CORNER-TEKST (linksonder + rechtsonder) — fade-out bij scroll -->
+    <div class="corner-text corner-text--bl" id="corner-bl">
+      <div class="corner-text__eyebrow">PROJECT ONE</div>
+      <div class="corner-text__title">First One — <em>Daily Driver.</em></div>
+      <div class="corner-text__body">Verwijderbare 360 Wh batterij · 250 W motor · geïntegreerde LED-verlichting.</div>
+    </div>
+    <div class="corner-text corner-text--br" id="corner-br">
+      <div class="corner-text__eyebrow">EINDHOVEN · NL</div>
+      <div class="corner-text__title">Engineered for <em>the quiet ride.</em></div>
+      <div class="corner-text__body">Voor iedereen, elke dag.<br/><span class="corner-text__hint">Scroll to explore ↓</span></div>
+    </div>
 
     <!-- scene-label linksboven -->
     <div class="scene-label">
@@ -1057,12 +1157,14 @@ gsap.ticker.add((time) => lenis.raf(time * 1000));
 gsap.ticker.lagSmoothing(0);
 
 /* ──────────────────────────────────────────────────────────
-   ▸▸▸ HERO HINT FADE OUT ON SCROLL (fase 4 polish)
+   ▸▸▸ HERO HINT FADE OUT ON SCROLL (corner-text wordt elders verborgen)
    ────────────────────────────────────────────────────────── */
 const heroHint = document.getElementById('hero-hint');
-window.addEventListener('scroll', () => {
-  heroHint.style.opacity = window.scrollY > 80 ? '0' : '1';
-}, { passive: true });
+if (heroHint) {
+  window.addEventListener('scroll', () => {
+    heroHint.style.opacity = window.scrollY > 80 ? '0' : '1';
+  }, { passive: true });
+}
 
 /* ──────────────────────────────────────────────────────────
    ▸▸▸ HOTSPOT TARGETS — wereldposities in de three.js scene
@@ -1081,17 +1183,17 @@ const TARGETS = {
 /* Camera-keyframes: elk keyframe heeft een eigen progress-waarde (0–1).
    Gelijke progress-waarden achter elkaar = pauze (camera blijft staan). */
 const KEYFRAMES = [
-  { // 0.00  ▸ START — de oude eind-positie: vooraan-boven, kijkt op stem.007
+  { // 0.00  ▸ START — wijde 3/4 hero-shot: hele bike zichtbaar
     progress: 0.00,
-    pos:  new THREE.Vector3(0.0, 0.95,  0.7),
-    look: TARGETS.stem007,
-    fov:  30,
+    pos:  new THREE.Vector3(2.6, 0.9, 2.6),
+    look: new THREE.Vector3(0.0, 0.30, 0.0),
+    fov:  35,
   },
-  { // 0.10  ▸ houd start vast tijdens titel-intro (subtiele drift naar achter)
+  { // 0.10  ▸ subtiele drift voor hero (lichte parallax tijdens corner-tekst)
     progress: 0.10,
-    pos:  new THREE.Vector3(0.05, 0.95, 0.85),
-    look: TARGETS.stem007,
-    fov:  30,
+    pos:  new THREE.Vector3(2.85, 0.85, 2.40),
+    look: new THREE.Vector3(0.0, 0.30, 0.0),
+    fov:  34,
   },
   { // 0.20  ▸ ZIJKANT — volledige side-view van rechts
     progress: 0.20,
@@ -1238,7 +1340,7 @@ gsap.ticker.add(() => {
    ▸▸▸ TEKST-OVERLAYS gekoppeld aan scroll-progress ranges
    ────────────────────────────────────────────────────────── */
 const PANEL_RANGES = [
-  { id: 'intro',       selector: '#intro-overlay',                    from: 0.00, to: 0.10, label: 'Intro',      num: '01' },
+  { id: 'intro',       selector: '#intro-overlay',                    from: -1,   to: -0.5, label: 'Intro',      num: '01' },
   { id: 'side',        selector: null,                                from: 0.16, to: 0.28, label: 'Side view',  num: '02' },
   { id: 'front',       selector: '.spec-panel[data-panel="front"]',   from: 0.34, to: 0.46, label: 'Front light',num: '03' },
   { id: 'beauty',      selector: null,                                from: 0.48, to: 0.60, label: 'Beauty',     num: '04' },
@@ -1258,6 +1360,9 @@ const smoothstep = (x, a, b) => {
 const sceneNum   = document.getElementById('scene-num');
 const sceneName  = document.getElementById('scene-name');
 const progressEls = [...document.querySelectorAll('.progress__step')];
+const sceneBgFade = document.getElementById('scene-bg-fade');
+const cornerBL    = document.getElementById('corner-bl');
+const cornerBR    = document.getElementById('corner-br');
 
 ScrollTrigger.create({
   trigger: '.scene-container',
@@ -1267,6 +1372,15 @@ ScrollTrigger.create({
   onUpdate: (self) => {
     const p = self.progress;
     scrollProgress = p;
+
+    // ▸ Achtergrond fade: wit (0) → zwart (1) tijdens de eerste 8% scroll
+    const fade = Math.min(1, Math.max(0, (p - 0.00) / 0.08));
+    sceneBgFade.style.setProperty('--fade', fade.toFixed(3));
+
+    // ▸ Corner-tekst verdwijnt zodra scroll begint
+    const hide = p > 0.015;
+    cornerBL.classList.toggle('is-hidden', hide);
+    cornerBR.classList.toggle('is-hidden', hide);
 
     // Welk panel is actief?
     let active = null;
