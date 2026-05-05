@@ -667,14 +667,94 @@ body::after {
 }
 
 /* ──────────────────────────────────────────────────────────
-   10. PRELOADER (fase 4)
+   10. PRELOADER — skeleton screen mirroring the hero layout
    ────────────────────────────────────────────────────────── */
-.preloader { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center; transition: opacity .8s; }
+.preloader {
+  position: fixed; inset: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #eef1f6 40%, #dde2eb 100%);
+  z-index: 100;
+  transition: opacity .6s ease;
+}
 .preloader.hidden { opacity: 0; pointer-events: none; }
-.preloader__bar { width: 200px; height: 1px; background: var(--line); position: relative; overflow: hidden; }
-.preloader__bar::after { content: ''; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+
+/* Shimmer-keyframe gebruikt door alle skeleton-elementen */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skel {
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.05) 0%,
+    rgba(0,0,0,0.10) 50%,
+    rgba(0,0,0,0.05) 100%);
+  background-size: 800px 100%;
+  border-radius: 8px;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Linksboven — eyebrow + 2-regel titel + body-regel */
+.preloader__bl { position: absolute; top: 120px; left: 56px; display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
+.preloader__bl .skel--eyebrow { height: 14px; width: 140px; }
+.preloader__bl .skel--title-1 { height: 70px; width: 460px; }
+.preloader__bl .skel--title-2 { height: 70px; width: 380px; }
+.preloader__bl .skel--body    { height: 18px; width: 320px; margin-top: 6px; }
+
+/* Rechtsonder — 2-regel titel + 2 knoppen */
+.preloader__br { position: absolute; bottom: 80px; right: 56px; display: flex; flex-direction: column; gap: 18px; align-items: flex-end; max-width: 560px; }
+.preloader__br .skel--title-1 { height: 70px; width: 460px; }
+.preloader__br .skel--title-2 { height: 70px; width: 360px; }
+.preloader__br .skel--row { display: flex; gap: 12px; margin-top: 12px; }
+.preloader__br .skel--btn { height: 46px; width: 200px; border-radius: 999px; }
+
+/* Centrale fiets-silhouet placeholder */
+.preloader__center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 360px; height: 200px;
+  display: flex; align-items: center; justify-content: center; gap: 28px;
+  opacity: 0.55;
+}
+.preloader__center .skel--wheel {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: transparent;
+  border: 12px solid rgba(0,0,0,0.10);
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+}
+@keyframes skeleton-pulse { 0%,100% { opacity: 0.55; } 50% { opacity: 0.85; } }
+
+/* Onderin — voortgangsbalk en label */
+.preloader__bar {
+  position: absolute; left: 50%; bottom: 38px; transform: translateX(-50%);
+  width: 240px; height: 2px; background: rgba(0,0,0,0.08);
+  border-radius: 2px; overflow: hidden;
+}
+.preloader__bar::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--link);
+  transform: scaleX(var(--p, 0.05));
+  transform-origin: left;
+  transition: transform .25s ease;
+}
 .preloader[data-progress="1"] .preloader__bar::after { transform: scaleX(1); }
-.preloader__label { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-mute); }
+.preloader__label {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+@media (max-width: 768px) {
+  .preloader__bl { top: 80px; left: 18px; gap: 12px; }
+  .preloader__bl .skel--eyebrow { height: 10px; width: 100px; }
+  .preloader__bl .skel--title-1 { height: 36px; width: 70vw; max-width: 320px; }
+  .preloader__bl .skel--title-2 { height: 36px; width: 55vw; max-width: 260px; }
+  .preloader__bl .skel--body    { height: 14px; width: 60vw; max-width: 240px; }
+  .preloader__br { bottom: 32px; right: 18px; gap: 12px; }
+  .preloader__br .skel--title-1 { height: 36px; width: 70vw; max-width: 320px; }
+  .preloader__br .skel--title-2 { height: 36px; width: 55vw; max-width: 260px; }
+  .preloader__br .skel--btn { height: 38px; width: 130px; }
+  .preloader__center { width: 220px; height: 130px; gap: 18px; }
+  .preloader__center .skel--wheel { width: 80px; height: 80px; border-width: 8px; }
+}
 
 /* ──────────────────────────────────────────────────────────
    11. RESPONSIVE
@@ -798,8 +878,30 @@ body::after {
 </head>
 <body>
 
-<!-- ── PRELOADER ────────────────────────────────────────── -->
+<!-- ── PRELOADER (skeleton screen) ─────────────────────── -->
 <div class="preloader" id="preloader">
+  <!-- Hero linksboven skeleton -->
+  <div class="preloader__bl">
+    <div class="skel skel--eyebrow"></div>
+    <div class="skel skel--title-1"></div>
+    <div class="skel skel--title-2"></div>
+    <div class="skel skel--body"></div>
+  </div>
+  <!-- Hero rechtsonder skeleton -->
+  <div class="preloader__br">
+    <div class="skel skel--title-1"></div>
+    <div class="skel skel--title-2"></div>
+    <div class="skel--row">
+      <div class="skel skel--btn"></div>
+      <div class="skel skel--btn"></div>
+    </div>
+  </div>
+  <!-- Centrale fiets-placeholder (twee wielen) -->
+  <div class="preloader__center">
+    <div class="skel--wheel"></div>
+    <div class="skel--wheel"></div>
+  </div>
+  <!-- Voortgang -->
   <div class="preloader__bar"></div>
   <div class="preloader__label">Loading the ride…</div>
 </div>
