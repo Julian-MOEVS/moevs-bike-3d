@@ -52,7 +52,12 @@
    2. RESET + BASE
    ────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--bg); color: var(--fg); }
+html, body { color: var(--fg); }
+/* Zachte wit → licht-grijs verloop over de hele pagina (alleen de 3D-scene heeft eigen achtergrond) */
+body {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f3f4f7 45%, #eceef3 100%) fixed;
+}
 body {
   font-family: var(--mono);
   font-weight: 300;
@@ -70,20 +75,8 @@ img { display: block; max-width: 100%; }
 /* ──────────────────────────────────────────────────────────
    3. PAGE BACKGROUND — grain + grid
    ────────────────────────────────────────────────────────── */
-/* Blauwdruk-grid op 10% opacity — zichtbaar over alle witte secties */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(0,88,230,1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,88,230,1) 1px, transparent 1px),
-    linear-gradient(to right, rgba(0,88,230,0.5) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,88,230,0.5) 1px, transparent 1px);
-  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
-  opacity: 0.10;
-  pointer-events: none;
-  z-index: 1;
-}
+/* Geen globale blueprint meer op de witte secties — grid leeft alleen in de 3D-scene */
+body::before { content: none; }
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -194,6 +187,19 @@ body::after {
   height: 100vh; width: 100%;
   overflow: hidden;
   background: transparent;
+}
+/* blueprint grid in de scene — achter de fiets, op 10% opacity */
+.scene-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(0,88,230,1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,88,230,1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0,88,230,0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,88,230,0.5) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 1;
 }
 /* fade-laag onder canvas: start wit, gaat naar zwart via JS-variabele --fade */
 .scene-bg-fade {
@@ -766,6 +772,8 @@ body::after {
 
     <!-- achtergrond fade-laag: wit → zwart tijdens scroll -->
     <div class="scene-bg-fade" id="scene-bg-fade"></div>
+    <!-- blueprint grid binnen de scene (achter de fiets) -->
+    <div class="scene-grid" id="scene-grid"></div>
 
     <!-- decoratieve ringen -->
     <div class="rings" id="rings">
@@ -789,22 +797,16 @@ body::after {
       <div class="corner-text__body">Voor iedereen, elke dag.<br/><span class="corner-text__hint">Scroll to explore ↓</span></div>
     </div>
 
-    <!-- scene-label linksboven -->
-    <div class="scene-label">
-      <span class="scene-label__num" id="scene-num">01</span>
-      <span id="scene-name">Overview</span>
-    </div>
-
-    <!-- progress indicator rechts -->
+    <!-- progress indicator rechts (alleen dots, geen labels) -->
     <ul class="progress" id="progress">
-      <li class="progress__step" data-step="0"><span class="dot"></span><span class="label">Intro</span></li>
-      <li class="progress__step" data-step="1"><span class="dot"></span><span class="label">Side view</span></li>
-      <li class="progress__step" data-step="2"><span class="dot"></span><span class="label">Front light</span></li>
-      <li class="progress__step" data-step="3"><span class="dot"></span><span class="label">Beauty</span></li>
-      <li class="progress__step" data-step="4"><span class="dot"></span><span class="label">Energy</span></li>
-      <li class="progress__step" data-step="5"><span class="dot"></span><span class="label">Visibility</span></li>
-      <li class="progress__step" data-step="6"><span class="dot"></span><span class="label">Slide</span></li>
-      <li class="progress__step" data-step="7"><span class="dot"></span><span class="label">MOEVS</span></li>
+      <li class="progress__step" data-step="0"><span class="dot"></span></li>
+      <li class="progress__step" data-step="1"><span class="dot"></span></li>
+      <li class="progress__step" data-step="2"><span class="dot"></span></li>
+      <li class="progress__step" data-step="3"><span class="dot"></span></li>
+      <li class="progress__step" data-step="4"><span class="dot"></span></li>
+      <li class="progress__step" data-step="5"><span class="dot"></span></li>
+      <li class="progress__step" data-step="6"><span class="dot"></span></li>
+      <li class="progress__step" data-step="7"><span class="dot"></span></li>
     </ul>
 
     <!-- ── DISPLAY LOGO — verschijnt bij display-zoom op het einde ── -->
@@ -1361,8 +1363,6 @@ const smoothstep = (x, a, b) => {
   return t * t * (3 - 2 * t);
 };
 
-const sceneNum   = document.getElementById('scene-num');
-const sceneName  = document.getElementById('scene-name');
 const progressEls = [...document.querySelectorAll('.progress__step')];
 const sceneBgFade = document.getElementById('scene-bg-fade');
 const cornerBL    = document.getElementById('corner-bl');
@@ -1398,12 +1398,6 @@ ScrollTrigger.create({
       const el = document.querySelector(r.selector);
       if (!el) continue;
       el.classList.toggle('active', active && active.id === r.id);
-    }
-
-    // Scene-label linksboven
-    if (active) {
-      sceneNum.textContent  = active.num;
-      sceneName.textContent = active.label;
     }
 
     // Progress-bullets rechts
