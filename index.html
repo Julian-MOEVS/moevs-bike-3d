@@ -248,6 +248,13 @@ body::after {
   transform: translateY(20px);
   transition: opacity .6s, transform .6s;
   pointer-events: none;
+  padding: 26px 30px;
+  background: rgba(10,11,14,0.58);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
 }
 .spec-panel.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .spec-panel__eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
@@ -307,6 +314,94 @@ body::after {
 .display-logo.active {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
+}
+
+/* ── COLOR PICKER — framekleur kiezen (verschijnt bij Side view) ── */
+.color-picker {
+  position: absolute; left: 50%; bottom: 54px; transform: translate(-50%, 16px);
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .5s, transform .5s;
+  z-index: 11;
+}
+.color-picker.active { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.color-picker__label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--fg-dim); }
+.color-picker__swatches { display: flex; gap: 14px; }
+.swatch {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--c);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.28), 0 2px 8px rgba(0,0,0,0.5);
+  cursor: pointer; padding: 0;
+  transition: transform .25s, box-shadow .25s;
+}
+.swatch:hover { transform: translateY(-3px) scale(1.08); }
+.swatch.is-active { transform: scale(1.12); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px #fff; }
+
+/* Hero-modus: configurator rechts-onder i.p.v. gecentreerd */
+.color-picker.color-picker--hero { left: auto; right: 40px; bottom: 56px; align-items: flex-end; text-align: right; }
+.color-picker.color-picker--hero.active { transform: translateY(0); }
+.color-picker--hero .swatch { width: 34px; height: 34px; }
+.color-name { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(20px, 2.2vw, 30px); color: var(--fg); letter-spacing: -0.01em; }
+.color-name.swap { animation: colorNameSwap .35s ease; }
+@keyframes colorNameSwap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── HERO COPY — grote kinetische kop over het canvas ── */
+.hero-copy {
+  position: absolute; left: 40px; top: 104px; max-width: 400px;
+  z-index: 9; text-align: left; pointer-events: none; will-change: opacity, transform;
+}
+.hero-copy::before {   /* subtiele donkere halo voor leesbaarheid */
+  content: ''; position: absolute; left: -10%; right: -12%; top: -16%; bottom: -16%;
+  background: radial-gradient(60% 60% at 28% 45%, rgba(0,0,0,0.36), transparent 78%);
+  z-index: -1; pointer-events: none;
+}
+.hero-copy__eyebrow {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--fg-dim);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.hero-copy__eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--accent-dim); }
+.hero-copy__title {
+  position: relative;
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(28px, 4.2vw, 52px); line-height: 0.98; letter-spacing: -0.03em;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.hero-copy__title em { font-style: italic; color: var(--accent); font-weight: 400; }
+.hero-line { display: block; overflow: hidden; }
+.hero-line > span { display: block; }
+.hero-ghost { display: none; }   /* geen grote ghost-outline bij de kleine kop */
+.hero-copy__sub { max-width: 34ch; font-size: 12px; color: var(--fg-dim); letter-spacing: 0.04em; line-height: 1.5; }
+
+/* scroll-cue in de pin */
+.hero-scrollcue {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.32em; color: var(--fg-mute);
+  z-index: 9; pointer-events: none;
+}
+.hero-scrollcue span::after { content: '↓'; display: block; margin-top: 8px; animation: bob 2.4s ease-in-out infinite; }
+
+/* studio-cove achter het canvas (grond-glow + subtiele achtergrond) */
+.scene-pin::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 42% at 50% 80%, rgba(255,255,255,0.06), transparent 72%),
+    linear-gradient(to bottom, rgba(255,255,255,0.025), transparent 46%);
+}
+#bike-canvas { z-index: 1; }
+
+/* journey-UI (rail + label) verborgen tijdens de hero, verschijnt in de reis */
+.scene-pin .scene-label, .scene-pin .progress { opacity: 0; transition: opacity .4s; }
+.scene-pin.journey-active .scene-label, .scene-pin.journey-active .progress { opacity: 1; }
+
+@media (max-width: 768px) {
+  .color-picker { bottom: 120px; gap: 10px; }
+  .swatch { width: 26px; height: 26px; }
+  .hero-copy { left: 20px; right: 20px; top: 88px; max-width: none; }
+  .hero-copy__title { font-size: clamp(26px, 8vw, 44px); }
+  .color-picker.color-picker--hero { left: 50%; right: auto; bottom: 120px; transform: translateX(-50%); align-items: center; text-align: center; }
+  .color-picker.color-picker--hero.active { transform: translateX(-50%); }
+  .color-picker--hero .swatch { width: 26px; height: 26px; }
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -637,6 +732,35 @@ body::after {
   .everyone__title { font-size: clamp(28px, 8.5vw, 44px); }
   .footer__tagline { font-size: clamp(22px, 6vw, 30px); }
 }
+
+/* ──────────────────────────────────────────────────────────
+   15. STATS — 3 kerncijfers, tellen op bij het scrollen
+   ────────────────────────────────────────────────────────── */
+.stats { position: relative; background: var(--bg); padding: 140px 40px; z-index: 5; }
+.stats__inner { max-width: var(--container-max); margin: 0 auto; }
+.stats__head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 70px; max-width: 680px; }
+.stats__eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.32em; color: var(--fg-dim); display: flex; align-items: center; gap: 12px; }
+.stats__eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent); }
+.stats__title { font-family: var(--serif); font-weight: 700; font-size: clamp(34px, 5vw, 68px); line-height: 1.0; letter-spacing: -0.02em; text-transform: uppercase; color: var(--fg); }
+.stats__title em { font-style: italic; font-weight: 500; color: var(--fg-dim); }
+.stats__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.stat-card {
+  border: 1px solid var(--line); border-radius: 16px; padding: 40px 34px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), transparent);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.stat-card__num { display: flex; align-items: baseline; gap: 8px; font-family: var(--serif); font-weight: 300; color: var(--fg); }
+.stat-val { font-size: clamp(56px, 8vw, 104px); line-height: 0.9; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.stat-plus { font-family: var(--serif); font-weight: 300; font-size: clamp(40px, 6vw, 76px); line-height: 0.9; letter-spacing: -0.04em; color: var(--fg); margin-left: -8px; }
+.stat-card__unit { font-size: clamp(20px, 2.4vw, 30px); color: var(--fg-dim); font-weight: 400; }
+.stat-card__label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.24em; color: var(--fg); font-weight: 600; }
+.stat-card__desc { font-size: 13px; color: var(--fg-dim); line-height: 1.6; }
+@media (max-width: 820px) {
+  .stats { padding: 90px 20px; }
+  .stats__head { margin-bottom: 46px; }
+  .stats__grid { grid-template-columns: 1fr; gap: 16px; }
+  .stat-card { padding: 30px 26px; }
+}
 </style>
 </head>
 <body>
@@ -663,15 +787,7 @@ body::after {
   <a href="#reserve" class="nav__cta">Reserve →</a>
 </nav>
 
-<!-- ── HERO ─────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero__eyebrow">PROJECT ONE</div>
-  <h1 class="hero__title">YOUR <em>DAILY</em><br/>DRIVER.</h1>
-  <p class="hero__sub">De MOEVS First One — verwijderbare 360 Wh batterij, krachtige 250 W motor, geïntegreerde LED-verlichting. Voor iedereen, elke dag.</p>
-  <div class="hero__hint" id="hero-hint"><span>Scroll to explore</span></div>
-</section>
-
-<!-- ── PINNED SCENE ────────────────────────────────────── -->
+<!-- ── PINNED SCENE (hero + cinematische reis op één canvas) ────────── -->
 <section class="scene-container">
   <div class="scene-pin">
 
@@ -685,22 +801,29 @@ body::after {
     <!-- 3D canvas -->
     <canvas id="bike-canvas"></canvas>
 
-    <!-- scene-label linksboven -->
-    <div class="scene-label">
-      <span class="scene-label__num" id="scene-num">01</span>
-      <span id="scene-name">Overview</span>
+    <!-- ── HERO COPY (overlay op canvas, vervaagt bij scrollen) ── -->
+    <div class="hero-copy" id="hero-copy">
+      <div class="hero-copy__eyebrow">PROJECT ONE</div>
+      <h1 class="hero-copy__title">
+        <span class="hero-line"><span>YOUR <em>DAILY</em></span></span>
+        <span class="hero-line"><span>DRIVER.</span></span>
+        <span class="hero-ghost" aria-hidden="true">DRIVER.</span>
+      </h1>
+      <p class="hero-copy__sub">Verwijderbare 360 Wh accu. 250 W motor. Geïntegreerd licht. Voor iedereen, elke dag.</p>
     </div>
+
+    <!-- scroll-cue -->
+    <div class="hero-scrollcue" id="hero-scrollcue"><span>Scroll to explore</span></div>
 
     <!-- progress indicator rechts -->
     <ul class="progress" id="progress">
-      <li class="progress__step" data-step="0"><span class="dot"></span><span class="label">Intro</span></li>
-      <li class="progress__step" data-step="1"><span class="dot"></span><span class="label">Side view</span></li>
-      <li class="progress__step" data-step="2"><span class="dot"></span><span class="label">Front light</span></li>
-      <li class="progress__step" data-step="3"><span class="dot"></span><span class="label">Beauty</span></li>
-      <li class="progress__step" data-step="4"><span class="dot"></span><span class="label">Energy</span></li>
-      <li class="progress__step" data-step="5"><span class="dot"></span><span class="label">Visibility</span></li>
-      <li class="progress__step" data-step="6"><span class="dot"></span><span class="label">Slide</span></li>
-      <li class="progress__step" data-step="7"><span class="dot"></span><span class="label">MOEVS</span></li>
+      <li class="progress__step" data-step="0"><span class="dot"></span><span class="label">Side view</span></li>
+      <li class="progress__step" data-step="1"><span class="dot"></span><span class="label">Headlight</span></li>
+      <li class="progress__step" data-step="2"><span class="dot"></span><span class="label">Battery</span></li>
+      <li class="progress__step" data-step="3"><span class="dot"></span><span class="label">Rear</span></li>
+      <li class="progress__step" data-step="4"><span class="dot"></span><span class="label">Taillight</span></li>
+      <li class="progress__step" data-step="5"><span class="dot"></span><span class="label">Aerial</span></li>
+      <li class="progress__step" data-step="6"><span class="dot"></span><span class="label">MOEVS</span></li>
     </ul>
 
     <!-- ── DISPLAY LOGO — verschijnt bij display-zoom op het einde ── -->
@@ -720,17 +843,17 @@ body::after {
       <article class="spec-panel spec-panel--bl" data-panel="front">
         <div class="spec-panel__eyebrow">01 · Veiligheid</div>
         <h3 class="spec-panel__head">Geïntegreerde <em>LED-verlichting.</em></h3>
-        <p class="spec-panel__body">Geen losse lamp, geen rubberen klemmen — het voorlicht zit volledig geïntegreerd in het frame en wordt gevoed door dezelfde batterij. Altijd zichtbaar, ook in de schemering.</p>
+        <p class="spec-panel__body">Geen losse lamp, geen rubberen klemmen. Het voorlicht zit volledig geïntegreerd in het frame en wordt gevoed door dezelfde batterij. Altijd zichtbaar, ook in de schemering.</p>
         <div class="spec-panel__stats">
           <div class="spec-panel__stat"><div class="lbl">Headlight</div><div class="val">LED</div></div>
           <div class="spec-panel__stat"><div class="lbl">Power</div><div class="val">Battery<sup>fed</sup></div></div>
         </div>
       </article>
 
-      <article class="spec-panel spec-panel--tl" data-panel="battery" style="left: 18%;">
+      <article class="spec-panel spec-panel--bl" data-panel="battery" style="bottom: 20%; left: 6%;">
         <div class="spec-panel__eyebrow">02 · Energy</div>
         <h3 class="spec-panel__head">Verwijderbare <em>360 Wh batterij.</em></h3>
-        <p class="spec-panel__body">36 V, 10 Ah Li-ion cel — slim verborgen in het onderbuis-profiel en met één klik uitneembaar. Tot 80 km bereik en 4–5 uur laadtijd aan je bureau.</p>
+        <p class="spec-panel__body">36 V, 10 Ah Li-ion cel, slim verborgen in het onderbuis-profiel en met één klik uitneembaar. Tot 80 km bereik en 4-5 uur laadtijd aan je bureau.</p>
         <div class="spec-panel__stats">
           <div class="spec-panel__stat"><div class="lbl">Capacity</div><div class="val">360<sup>Wh</sup></div></div>
           <div class="spec-panel__stat"><div class="lbl">Range</div><div class="val">80<sup>km</sup></div></div>
@@ -740,7 +863,7 @@ body::after {
       <article class="spec-panel spec-panel--bl" data-panel="rear" style="left: 8%; bottom: 18%;">
         <div class="spec-panel__eyebrow">03 · Visibility</div>
         <h3 class="spec-panel__head">LED-achterlicht, <em>fully integrated.</em></h3>
-        <p class="spec-panel__body">Het achterlicht zit in het zadelbuis-profiel verwerkt — geen accessoire, geen kabels op zicht. Onderdeel van het geïntegreerde LED-systeem dat MOEVS vanaf de eerste rit veilig houdt.</p>
+        <p class="spec-panel__body">Het achterlicht zit in het zadelbuis-profiel verwerkt, geen accessoire, geen kabels op zicht. Onderdeel van het geïntegreerde LED-systeem dat MOEVS vanaf de eerste rit veilig houdt.</p>
         <div class="spec-panel__stats">
           <div class="spec-panel__stat"><div class="lbl">Taillight</div><div class="val">LED</div></div>
           <div class="spec-panel__stat"><div class="lbl">Style</div><div class="val">Integrated</div></div>
@@ -748,6 +871,47 @@ body::after {
       </article>
     </div>
 
+    <!-- ── COLOR CONFIGURATOR — framekleur kiezen (hero + Side view) ── -->
+    <div class="color-picker" id="color-picker">
+      <span class="color-picker__label">Kies je finish</span>
+      <div class="color-picker__swatches">
+        <button class="swatch is-active" style="--c:#1a1a1a" data-color="#1a1a1a" data-name="Onyx" aria-label="Onyx"></button>
+        <button class="swatch" style="--c:#0f4fc4" data-color="#0f4fc4" data-name="MOEVS Blue" aria-label="MOEVS Blue"></button>
+        <button class="swatch" style="--c:#a52732" data-color="#a52732" data-name="Racing Red" aria-label="Racing Red"></button>
+        <button class="swatch" style="--c:#245344" data-color="#245344" data-name="Forest Green" aria-label="Forest Green"></button>
+        <button class="swatch" style="--c:#b8a888" data-color="#b8a888" data-name="Champagne" aria-label="Champagne"></button>
+        <button class="swatch" style="--c:#c9ccd1" data-color="#c9ccd1" data-name="Silver" aria-label="Silver"></button>
+      </div>
+      <div class="color-name" id="color-name" aria-live="polite">Onyx</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── STATS — 3 kerncijfers die optellen bij het scrollen ──────────── -->
+<section class="stats" id="stats">
+  <div class="stats__inner">
+    <div class="stats__head">
+      <span class="stats__eyebrow">In cijfers</span>
+      <h2 class="stats__title">GEBOUWD OM <em>door te rijden.</em></h2>
+    </div>
+    <div class="stats__grid">
+      <article class="stat-card">
+        <div class="stat-card__num"><span class="stat-val" data-to="80">0</span><span class="stat-plus">+</span><span class="stat-card__unit">km</span></div>
+        <div class="stat-card__label">Rijbereik</div>
+        <p class="stat-card__desc">Tot 80 km op één lading.</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-card__num"><span class="stat-val" data-to="250">0</span><span class="stat-card__unit">W</span></div>
+        <div class="stat-card__label">Vermogen</div>
+        <p class="stat-card__desc">Mivice M080 achterwielmotor.</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-card__num"><span class="stat-val" data-to="40">0</span><span class="stat-card__unit">Nm</span></div>
+        <div class="stat-card__label">Koppel</div>
+        <p class="stat-card__desc">Direct koppel bij elke trap.</p>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -875,6 +1039,11 @@ import * as THREE from 'three';
 import { GLTFLoader }   from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader }  from 'three/addons/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }     from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass }     from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass }     from 'three/addons/postprocessing/OutputPass.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -896,42 +1065,120 @@ const state = {
    ▸▸▸ THREE.JS SETUP
    ────────────────────────────────────────────────────────── */
 const canvas   = document.getElementById('bike-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
+// Realistische belichting via image-based lighting (IBL): één environment-map levert
+// alle reflecties; die draaien correct mee met de camera (matcap deed dat niet). Plus
+// één key-light voor een meebewegende glans. Geen 7 lampen meer (dat was de hapering).
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.55;
+renderer.toneMappingExposure = 1.45;
 
 const scene = new THREE.Scene();
 
+/* ──── IBL ENVIRONMENT — één keer prefilteren bij load, daarna gratis per frame ──── */
 const pmrem = new THREE.PMREMGenerator(renderer);
-const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-scene.environment = envTex;
-scene.environmentIntensity = 1.6;   // sterker indirect licht via PBR-environment
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 1.25;   // meer indirect licht via de environment-map
+pmrem.dispose();                 // de dure prefilter draait maar één keer
+// géén scene.background: canvas blijft transparant zodat de pagina-grain doorschijnt
+
+/* ──── LIGHTS — key + zachte koele fill (wereld-vast, geen schaduw). IBL doet het
+       meeste; 2 lampen geeft merkbaar meer licht en blijft goedkoop. ──── */
+const key = new THREE.DirectionalLight(0xffffff, 2.6);
+key.position.set(3, 5, 2);
+key.castShadow = false;
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xdfe8ff, 1.1);   // koele fill aan de schaduwzijde
+fill.position.set(-4, 2, -3);
+fill.castShadow = false;
+scene.add(fill);
 
 const camera = new THREE.PerspectiveCamera(state.fov, 1, 0.01, 100);
 camera.position.set(state.posX, state.posY, state.posZ);
 camera.lookAt(0, 0.6, 0);
 
-/* ──── LIGHTING — ambient + key + rim + fill ──── */
-scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+/* ──── MATERIAL TUNING — behoud de PBR-materialen uit de GLB en stel per
+       materiaal-klasse metalness/roughness/envMapIntensity in (op basis van de
+       echte CAD-namen). Realisme komt van de environment-map, geen matcap-conversie.
+       Scalar-aanpassingen hebben geen needsUpdate nodig. ──── */
+/* ──── FRAME-LAK — alleen de gelakte delen van het FRAME zijn recolorbaar.
+       De zwarte lak (Paint_Black) zit ook op vork, remmen en spatborden; die
+       mogen NIET meewisselen. Daarom recoloren we alleen materialen die op een
+       "Frame finished"-node zitten (in de GLB niet gedeeld met andere delen). ──── */
+const frameMats = [];
+const _paintCache = new Map();   // origineel materiaal -> paint-materiaal (dedup)
 
-const key = new THREE.DirectionalLight(0xfff1d6, 3.0);   // warm key
-key.position.set(3, 4, 2);
-scene.add(key);
+function makePaint(src, collect) {
+  let pm = _paintCache.get(src);
+  if (!pm) {
+    pm = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(0x1a1a1a),          // start: onyx zwart
+      metalness: 0.0, roughness: 0.42,
+      clearcoat: 0.6, clearcoatRoughness: 0.15,  // autolak-glans; kleur leest waarheidsgetrouw
+      envMapIntensity: 1.1,
+      map: src.map || null, normalMap: src.normalMap || null,
+    });
+    if (src.normalScale && pm.normalScale) pm.normalScale.copy(src.normalScale);
+    pm.name = src.name;
+    _paintCache.set(src, pm);
+  }
+  if (collect && !frameMats.includes(pm)) frameMats.push(pm);   // alleen frame-lak wisselt
+  return pm;
+}
 
-const rim = new THREE.DirectionalLight(0xa8c8ff, 1.6);   // cool rim
-rim.position.set(-3, 2, -3);
-scene.add(rim);
+function tuneOne(m, onFrame) {
+  const n = (m.name || '').toLowerCase();
+  const floor = (v) => { m.roughness = Math.max(m.roughness ?? 1, v); };
+  if (/band|rubber|handvat|grip|belt/.test(n))               { m.metalness=0.0; floor(0.9);  m.envMapIntensity=0.35; }
+  else if (/griptape|zadel|saddle/.test(n))                  { m.metalness=0.0; floor(0.8);  m.envMapIntensity=0.4;  }
+  else if (/brake_disk|brake disk|rotor|disc/.test(n))       { m.metalness=1.0; floor(0.12); m.envMapIntensity=1.3;  }
+  else if (/steel|ruw_metaal|ruw metaal|stuur|metal/.test(n)){ m.metalness=1.0; floor(0.25); m.envMapIntensity=1.15; }
+  else if (/clear_shiny_plastic_white/.test(n))              { if (m.color) m.color.setHex(0x090b10); m.metalness=0.0; m.roughness=0.6; m.envMapIntensity=0.12; }  // schermglas: donker/mat, geen glans-streep
+  else if (/hard_shiny_plastic_black/.test(n))               { m.metalness=0.0; floor(0.45); m.envMapIntensity=0.30; }  // scherm-behuizing/zadel: minder glans
+  else if (/clear|lens|shiny|reflector|led|light/.test(n))   { m.metalness=0.0; floor(0.08); m.envMapIntensity=1.2;  }
+  else if (/plastic|cable|pedal/.test(n))                    { m.metalness=0.0; floor(0.45); m.envMapIntensity=0.7;  }
+  else if (/f1_ash|ash/.test(n))                             { m.metalness=0.2; floor(0.3);  m.envMapIntensity=0.9;  }
+  else return makePaint(m, onFrame);   // Paint_Black lak -> recolorbaar ALLEEN op het frame
+  m.roughness = Math.max(m.roughness, 0.08);   // firefly-vloer
+  return m;
+}
 
-const fill = new THREE.DirectionalLight(0xffffff, 1.0);  // soft fill
-fill.position.set(0, -2, 2);
-scene.add(fill);
+/* Zit dit object (of een voorouder) in de "Frame finished"-groep? */
+function inFrame(o) { for (let p = o; p; p = p.parent) if (/frame/i.test(p.name || '')) return true; return false; }
 
-// extra omni-fillers zodat geen vlak ooit volledig zwart is
-const fillTop  = new THREE.DirectionalLight(0xffffff, 0.7); fillTop.position.set(0, 5, 0);  scene.add(fillTop);
-const fillBack = new THREE.DirectionalLight(0xffffff, 0.5); fillBack.position.set(0, 1, -5); scene.add(fillBack);
+/* Koplamp + achterlicht: de lens-materialen hebben al een emissieve kleur in de GLB
+   (koplamp wit, achterlicht rood). We laten ze fel gloeien en negeren tonemapping
+   zodat ze echt 'licht geven'. */
+let _lampCount = 0;
+function boostLamp(m) {
+  if (m.emissive && (m.emissive.r + m.emissive.g + m.emissive.b) > 0.01) {
+    m.emissiveIntensity = 3.2;
+    m.toneMapped = false;
+    _lampCount++;
+  }
+  return m;
+}
 
+function tuneMaterials(root) {
+  root.traverse((o) => {
+    if (!o.isMesh || !o.material) return;
+    o.castShadow = o.receiveShadow = false;
+    const onFrame = inFrame(o);
+    o.material = Array.isArray(o.material)
+      ? o.material.map((m) => boostLamp(tuneOne(m, onFrame)))
+      : boostLamp(tuneOne(o.material, onFrame));
+  });
+  console.info('[bike] frame-lak:', frameMats.length, '| emissieve lampen:', _lampCount);
+}
+
+/* Wissel de kleur van alleen de frame-lak. */
+function setBikeColor(hex) {
+  const c = new THREE.Color(hex);
+  for (const m of frameMats) m.color.copy(c);
+  invalidate();
+}
 
 /* ──── BIKE CONTAINER ──── */
 const bikeGroup = new THREE.Group();
@@ -987,6 +1234,63 @@ function fitModel(obj) {
   obj.position.y += -box.min.y * scale * 0.5;  // wat optillen
 }
 
+/* ──── CONTACT SHADOW — platte, ingebakken grond-schaduw onder de fiets ──── */
+function addContactShadow(model) {
+  const box  = new THREE.Box3().setFromObject(model);
+  const size = box.getSize(new THREE.Vector3());
+  const c    = box.getCenter(new THREE.Vector3());
+  const tex  = new THREE.TextureLoader().load('contact-shadow.png');
+  tex.colorSpace = THREE.SRGBColorSpace;
+
+  const longX = size.x >= size.z;
+  const w = (longX ? size.x : size.z) * 1.5;   // lange as van de schaduw
+  const d = (longX ? size.z : size.x) * 2.0;   // korte as (breedte)
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, d),
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0.9 })
+  );
+  plane.rotation.x = -Math.PI / 2;
+  if (!longX) plane.rotation.z = Math.PI / 2;   // texture-lengte langs langste as
+  plane.position.set(c.x, box.min.y + 0.002, c.z);
+  plane.renderOrder = -1;
+  scene.add(plane);
+}
+
+/* ──── LAMPEN — verzamel de emissieve lamp-materialen zodat de lamp zelf op zijn
+       zij-shot fel wit (koplamp) / fel rood (achterlicht) kan oplichten. ──── */
+const lampMats = [];
+function collectLamps(root) {
+  root.traverse((o) => {
+    if (!o.isMesh || !o.material) return;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    for (const m of mats) {
+      if (!(m.emissive && m.emissiveIntensity > 1)) continue;
+      const kind = (m.emissive.r > 0.4 && m.emissive.g < 0.3 && m.emissive.b < 0.3) ? 'tail' : 'head';
+      if (!lampMats.some((l) => l.mat === m)) lampMats.push({ kind, mat: m });
+      o.layers.enable(kind === 'head' ? 1 : 2);   // koplamp = layer 1, achterlicht = layer 2
+    }
+  });
+}
+
+/* ──── DISPLAY-SCHERM — klein oplichtend 3D-scherm met het MOEVS-logo op het
+       stuur-display (waar het echte zwarte vierkantje zit). ──── */
+const DISPLAY_POS = new THREE.Vector3(-0.191, 0.607, -0.385);   // echte scherm-positie (opgemeten)
+function addDisplayScreen() {
+  const tex = new THREE.TextureLoader().load('screen-logo.png');
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const screen = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.040, 0.038),        // ~ formaat van de glasplaat (4 cm)
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false, depthWrite: false })
+  );
+  // oriëntatie: exact uit de scherm-mesh gemeten (PCA op de glasplaat-hoekpunten)
+  const normal = new THREE.Vector3(0.262, 0.841, 0.474);
+  const right  = new THREE.Vector3(0.874, 0.002, -0.487);
+  const up     = new THREE.Vector3(-0.410, 0.542, -0.734);
+  screen.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, up, normal));
+  screen.position.copy(DISPLAY_POS).addScaledVector(normal, 0.004);   // iets vóór de glasplaat
+  scene.add(screen);
+}
+
 /* ──── GLTF LOADER met Draco ──── */
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
@@ -997,11 +1301,15 @@ const preloader = document.getElementById('preloader');
 
 let bikeModel = null;
 gltfLoader.load(
-  'bike.glb',
+  'bike-mobile.glb',
   (gltf) => {
     bikeModel = gltf.scene;
+    tuneMaterials(bikeModel);        // behoud PBR-materialen + IBL: realistisch én snel
     fitModel(bikeModel);
     bikeGroup.add(bikeModel);
+    addContactShadow(bikeModel);     // ingebakken grond-schaduw (hun shadow-map-truc)
+    collectLamps(bikeModel);         // lamp-materialen om ze fel te laten oplichten
+    addDisplayScreen();              // oplichtend MOEVS-logo op het stuur-display
     invalidate();
     hidePreloader();
   },
@@ -1022,7 +1330,38 @@ gltfLoader.load(
 
 function hidePreloader() {
   preloader.dataset.progress = '1';
-  setTimeout(() => preloader.classList.add('hidden'), 600);
+  setTimeout(() => { preloader.classList.add('hidden'); playHeroEntrance(); }, 600);
+}
+
+/* ──── SELECTIEVE BLOOM — glow ALLEEN op de lamp-strip (bloom-layer), niet op de
+       hele fiets/achtergrond. Twee renders (alleen-de-lamp + volledig) samengevoegd.
+       Alleen actief op de licht-momenten (bloomStrength > 0), dus de reis blijft snel. ──── */
+let activeBloomLayer = 1;   // welke lamp nu mag bloomen: koplamp = 1, achterlicht = 2
+
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(canvas.clientWidth || 1, canvas.clientHeight || 1), 0.0, 0.7, 0.0); // strength(0, gemoduleerd), radius, threshold
+const bloomComposer = new EffectComposer(renderer);
+bloomComposer.renderToScreen = false;
+bloomComposer.addPass(new RenderPass(scene, camera));
+bloomComposer.addPass(bloomPass);
+
+const mixPass = new ShaderPass(new THREE.ShaderMaterial({
+  uniforms: { baseTexture: { value: null }, bloomTexture: { value: bloomComposer.renderTarget2.texture } },
+  vertexShader:   'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+  fragmentShader: 'uniform sampler2D baseTexture; uniform sampler2D bloomTexture; varying vec2 vUv; void main(){ gl_FragColor = texture2D(baseTexture, vUv) + texture2D(bloomTexture, vUv); }',
+}), 'baseTexture');
+const finalComposer = new EffectComposer(renderer);
+finalComposer.addPass(new RenderPass(scene, camera));
+finalComposer.addPass(mixPass);
+finalComposer.addPass(new OutputPass());
+
+let bloomStrength = 0;   // gezet in onUpdate op basis van de licht-beats
+function renderBloom() {
+  bloomPass.strength = bloomStrength;
+  renderer.setClearColor(0x000000, 0);       // TRANSPARANT: pagina-achtergrond blijft identiek
+  camera.layers.set(activeBloomLayer);       // render ALLEEN de actieve lamp (goedkoop)
+  bloomComposer.render();
+  camera.layers.set(0);                      // terug naar de volledige scene
+  finalComposer.render();                    // scene + gloed op transparant canvas
 }
 
 /* ──── RESIZE ──── */
@@ -1032,6 +1371,9 @@ function resize() {
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
+  bloomComposer.setSize(w, h);
+  finalComposer.setSize(w, h);
+  bloomPass.setSize(w, h);
 }
 new ResizeObserver(() => { resize(); invalidate(); }).observe(canvas);
 resize();
@@ -1041,7 +1383,8 @@ let needsRender = true;
 function invalidate() { needsRender = true; }
 function tick() {
   if (needsRender) {
-    renderer.render(scene, camera);
+    if (bloomStrength > 0.001) renderBloom();     // licht-moment: selectieve bloom
+    else renderer.render(scene, camera);          // gewone snelle render
     needsRender = false;
   }
   requestAnimationFrame(tick);
@@ -1055,14 +1398,6 @@ const lenis = new Lenis({ duration: 0.6, smoothWheel: true });
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => lenis.raf(time * 1000));
 gsap.ticker.lagSmoothing(0);
-
-/* ──────────────────────────────────────────────────────────
-   ▸▸▸ HERO HINT FADE OUT ON SCROLL (fase 4 polish)
-   ────────────────────────────────────────────────────────── */
-const heroHint = document.getElementById('hero-hint');
-window.addEventListener('scroll', () => {
-  heroHint.style.opacity = window.scrollY > 80 ? '0' : '1';
-}, { passive: true });
 
 /* ──────────────────────────────────────────────────────────
    ▸▸▸ HOTSPOT TARGETS — wereldposities in de three.js scene
@@ -1081,17 +1416,23 @@ const TARGETS = {
 /* Camera-keyframes: elk keyframe heeft een eigen progress-waarde (0–1).
    Gelijke progress-waarden achter elkaar = pauze (camera blijft staan). */
 const KEYFRAMES = [
-  { // 0.00  ▸ START — de oude eind-positie: vooraan-boven, kijkt op stem.007
+  { // 0.00  ▸ HERO — front-3/4 configurator-stage (desktop; portrait via setHeroPose)
     progress: 0.00,
-    pos:  new THREE.Vector3(0.0, 0.95,  0.7),
-    look: TARGETS.stem007,
-    fov:  30,
+    pos:  new THREE.Vector3(2.55, 0.42, 1.55),
+    look: new THREE.Vector3(-0.15, 0.24, 0.05),
+    fov:  34,
   },
-  { // 0.10  ▸ houd start vast tijdens titel-intro (subtiele drift naar achter)
-    progress: 0.10,
-    pos:  new THREE.Vector3(0.05, 0.95, 0.85),
-    look: TARGETS.stem007,
-    fov:  30,
+  { // 0.06  ▸ HERO HOLD — fluisterlichte dolly-back terwijl de kop leest
+    progress: 0.06,
+    pos:  new THREE.Vector3(2.55, 0.42, 1.62),
+    look: new THREE.Vector3(-0.15, 0.24, 0.05),
+    fov:  34,
+  },
+  { // 0.14  BRIDGE - vloeiende orbit van de hero-hoek naar de volledige zijkant
+    progress: 0.14,
+    pos:  new THREE.Vector3(2.90, 0.40, -0.85),
+    look: new THREE.Vector3(0.0, 0.26, -0.12),
+    fov:  31,
   },
   { // 0.20  ▸ ZIJKANT — volledige side-view van rechts
     progress: 0.20,
@@ -1105,90 +1446,113 @@ const KEYFRAMES = [
     look: new THREE.Vector3(0.0, 0.40, -0.5),
     fov:  32,
   },
-  { // 0.36  ▸ VOORKANT — recht voor de fiets
+  { // 0.36  FRONT LIGHT start - breed, rechts-voor: hele voorkant in beeld
     progress: 0.36,
-    pos:  new THREE.Vector3(0.0, 0.35, -2.1),
-    look: new THREE.Vector3(0.0, 0.40, -1.0),
-    fov:  22,
+    pos:  new THREE.Vector3(1.70, 0.52, -1.95),
+    look: new THREE.Vector3(0.0, 0.35, -0.45),   // draaipunt = de LED-strip vooraan
+    fov:  36,
   },
-  { // 0.42  ▸ PAUZE op voorkant zodat tekst leesbaar is
-    progress: 0.42,
-    pos:  new THREE.Vector3(0.0, 0.35, -2.1),
-    look: new THREE.Vector3(0.0, 0.40, -1.0),
-    fov:  22,
+  { // 0.41  FRONT LIGHT - boog naar voren, begint in te zoomen op de strip
+    progress: 0.41,
+    pos:  new THREE.Vector3(0.55, 0.48, -1.60),
+    look: new THREE.Vector3(0.0, 0.35, -0.45),
+    fov:  30,
   },
-  { // 0.50  ▸ BEAUTY ANGLE in — 3/4 front-right
+  { // 0.45  FRONT LIGHT - dead-front, ingezoomd op de oplichtende LED-strip
+    progress: 0.45,
+    pos:  new THREE.Vector3(-0.35, 0.46, -1.35),
+    look: new THREE.Vector3(0.0, 0.35, -0.45),
+    fov:  24,
+  },
+  { // 0.50  FRONT LIGHT - zwaait door naar links-voor, strip blijft middelpunt
     progress: 0.50,
-    pos:  new THREE.Vector3(1.20, 0.55, -1.30),
-    look: new THREE.Vector3(0.0, 0.42, -0.25),
-    fov:  28,
+    pos:  new THREE.Vector3(-1.35, 0.46, -1.15),
+    look: new THREE.Vector3(0.0, 0.35, -0.42),
+    fov:  27,
   },
-  { // 0.58  ▸ BEAUTY ANGLE drift
+  { // 0.58  BRIDGE - daalt van de voorkant naar de accu (links)
     progress: 0.58,
-    pos:  new THREE.Vector3(1.40, 0.40, -1.00),
-    look: new THREE.Vector3(0.0, 0.35, -0.05),
-    fov:  26,
+    pos:  new THREE.Vector3(-1.55, 0.38, -0.65),
+    look: new THREE.Vector3(0.0, 0.28, -0.20),
+    fov:  30,
   },
-  { // 0.62  ▸ ACCU arrive — ingezoomd op midden-zijkant (uitneembare batterij)
+  { // 0.62  ACCU - ingezoomd op de LINKER midden-zijkant (uitneembare batterij)
     progress: 0.62,
-    pos:  new THREE.Vector3(1.05, 0.30, -0.15),
+    pos:  new THREE.Vector3(-1.05, 0.30, -0.15),
     look: new THREE.Vector3(0.00, 0.20, -0.20),
     fov:  28,
   },
-  { // 0.68  ▸ ACCU HOLD — pauze
-    progress: 0.68,
-    pos:  new THREE.Vector3(1.05, 0.30, -0.15),
-    look: new THREE.Vector3(0.00, 0.20, -0.20),
+  { // 0.70  ACCU drift - zachte beweging langs de onderbuis (links)
+    progress: 0.70,
+    pos:  new THREE.Vector3(-1.25, 0.32, 0.28),
+    look: new THREE.Vector3(0.00, 0.22, 0.0),
     fov:  28,
   },
-  { // 0.78  ▸ BEAUTY REAR in — vloeiende orbit van accu naar achterkant
+  { // 0.78  REAR approach - komt vanaf links achter, kadert het achterlicht
     progress: 0.78,
-    pos:  new THREE.Vector3(2.30, 0.45,  1.40),
-    look: new THREE.Vector3(0.0,  0.30,  0.30),
-    fov:  38,
+    pos:  new THREE.Vector3(-1.90, 0.42, 1.95),
+    look: new THREE.Vector3(0.0, 0.16, 1.05),   // draaipunt = het achterlicht
+    fov:  34,
   },
-  { // 0.84  ▸ BEAUTY REAR drift — eerder neergezet om eind meer ademruimte te geven
-    progress: 0.84,
-    pos:  new THREE.Vector3(1.55, 0.38,  2.00),
-    look: new THREE.Vector3(0.0,  0.25,  0.50),
-    fov:  38,
+  { // 0.85  ACHTERLICHT - kwartdraai begint (links-achter), scene dimt, licht gaat aan
+    progress: 0.85,
+    pos:  new THREE.Vector3(-1.15, 0.32, 2.40),
+    look: new THREE.Vector3(0.0, 0.12, 1.05),
+    fov:  30,
   },
-  { // 0.88  ▸ ACHTERKANT — laag achter de fiets, geïntegreerd achterlicht
-    progress: 0.88,
-    pos:  new THREE.Vector3(0.0, 0.20, 1.95),
-    look: new THREE.Vector3(0.0, 0.15, 0.55),
-    fov:  35,
+  { // 0.89  ACHTERLICHT - recht achter: het rode licht schijnt de camera in, fel
+    progress: 0.89,
+    pos:  new THREE.Vector3(0.05, 0.30, 2.60),
+    look: new THREE.Vector3(0.0, 0.13, 1.05),
+    fov:  27,
   },
-  { // 0.90  ▸ ACHTERKANT HOLD — korte pauze
-    progress: 0.90,
-    pos:  new THREE.Vector3(0.0, 0.20, 1.95),
-    look: new THREE.Vector3(0.0, 0.15, 0.55),
-    fov:  35,
+  { // 0.92  ACHTERLICHT - kwartdraai eindigt (rechts-achter), begint te stijgen
+    progress: 0.92,
+    pos:  new THREE.Vector3(1.00, 0.55, 2.30),
+    look: new THREE.Vector3(0.0, 0.20, 1.00),
+    fov:  32,
   },
-  { // 0.95  ▸ AERIAL — hoge boog ver boven de fiets, neerkijkend op de cockpit
-    //  ▸ veel hoger dan de oude slide (Y 0.95 → 2.30) zodat de fly-down naar display dramatischer voelt
-    progress: 0.95,
-    pos:  new THREE.Vector3(0.0, 2.30, 1.20),
-    look: new THREE.Vector3(0.0, 0.30, 0.00),
-    fov:  42,
+  { // 0.96  RISE - hoog boven de fiets, maar kijkt al naar de cockpit/het scherm
+    progress: 0.96,
+    pos:  new THREE.Vector3(0.35, 1.70, 1.15),
+    look: new THREE.Vector3(-0.16, 0.57, -0.22),   // richt al op de cockpit/het scherm
+    fov:  40,
   },
-  { // 1.00  ▸ DISPLAY ZOOM (eind) — landt op cockpit, camera 30° naar links gedraaid
+  { // 1.00  DISPLAY - recht vóór het scherm (langs de normaal), iets teruggetrokken
     progress: 1.00,
-    pos:  new THREE.Vector3(0.25, 1.10, 0.20),
-    look: new THREE.Vector3(-0.30, 0.55, -0.45),
-    fov:  28,
+    pos:  new THREE.Vector3(-0.021, 1.155, -0.076),
+    look: new THREE.Vector3(-0.191, 0.608, -0.384),   // = het scherm
+    fov:  22,
   },
 ];
 
 /* ──── Pre-compute per-keyframe quaternions (zodat orient.-slerp exacte keyframe-poses hit) ──── */
 const _UP = new THREE.Vector3(0, 1, 0);
 const _m4 = new THREE.Matrix4();
-(function precomputeKeyframes(){
+function precomputeKeyframes(){
   for (const kf of KEYFRAMES) {
     _m4.lookAt(kf.pos, kf.look, _UP);
     kf.quat = new THREE.Quaternion().setFromRotationMatrix(_m4);
   }
-})();
+}
+/* Hero-pose (keyframe 0 + hold) verschilt tussen landscape en portrait zodat de
+   hele fiets ook staand in beeld past. */
+function setHeroPose(portrait){
+  if (portrait){   // schuin van voren, staand gekaderd
+    KEYFRAMES[0].pos.set(2.15, 0.78, -2.25); KEYFRAMES[0].look.set(0.0, 0.32, -0.10); KEYFRAMES[0].fov = 44;
+    KEYFRAMES[1].pos.set(2.30, 0.82, -2.02); KEYFRAMES[1].look.set(0.0, 0.32, -0.05); KEYFRAMES[1].fov = 44;
+  } else {         // schuin van voren (front-3/4 vanaf rechts): voorwiel + koplamp in beeld
+    KEYFRAMES[0].pos.set(2.35, 0.48, -1.85); KEYFRAMES[0].look.set(-0.10, 0.26, -0.15); KEYFRAMES[0].fov = 34;
+    KEYFRAMES[1].pos.set(2.62, 0.53, -1.55); KEYFRAMES[1].look.set(-0.05, 0.26, -0.06); KEYFRAMES[1].fov = 34;
+  }
+  precomputeKeyframes();
+}
+let _portrait = (window.innerHeight > window.innerWidth) || matchMedia('(max-width: 768px)').matches;
+setHeroPose(_portrait);
+window.addEventListener('resize', () => {
+  const portrait = (window.innerHeight > window.innerWidth) || matchMedia('(max-width: 768px)').matches;
+  if (portrait !== _portrait) { _portrait = portrait; setHeroPose(_portrait); invalidate(); }
+}, { passive: true });
 
 /* helper: zoek het juiste segment op basis van progress (variabele spacing) */
 const _camPos  = new THREE.Vector3();
@@ -1223,6 +1587,16 @@ let scrollProgress = 0;
   // niets — bestaande tick blijft draaien, maar we negeren state en plaatsen
   // de camera elke frame zelf via een aparte ticker:
 })();
+/* Camera volgt de scroll — PUUR ON-DEMAND: alleen renderen als de scroll wijzigt.
+   De continue hero-idle-beweging is bewust weggelaten: nul render-kosten als je
+   stilstaat, dus geen fan/hapering bovenaan de pagina. */
+const _reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Op mobiel/smal scherm: bredere FOV zodat de hele fiets in beeld past (uitzoomen).
+let _fovBoost = matchMedia('(max-width: 768px)').matches ? 9 : 0;
+window.addEventListener('resize', () => {
+  _fovBoost = matchMedia('(max-width: 768px)').matches ? 9 : 0;
+  _lastProgress = -1;   // forceer herberekening van de camera-fov
+}, { passive: true });
 let _lastProgress = -1;
 gsap.ticker.add(() => {
   if (scrollProgress === _lastProgress) return;
@@ -1230,7 +1604,8 @@ gsap.ticker.add(() => {
   const c = camAt(scrollProgress);
   camera.position.copy(c.pos);
   camera.quaternion.copy(c.quat);
-  if (camera.fov !== c.fov) { camera.fov = c.fov; camera.updateProjectionMatrix(); }
+  const targetFov = c.fov + _fovBoost;
+  if (camera.fov !== targetFov) { camera.fov = targetFov; camera.updateProjectionMatrix(); }
   invalidate();
 });
 
@@ -1238,15 +1613,13 @@ gsap.ticker.add(() => {
    ▸▸▸ TEKST-OVERLAYS gekoppeld aan scroll-progress ranges
    ────────────────────────────────────────────────────────── */
 const PANEL_RANGES = [
-  { id: 'intro',       selector: '#intro-overlay',                    from: 0.00, to: 0.10, label: 'Intro',      num: '01' },
-  { id: 'side',        selector: null,                                from: 0.16, to: 0.28, label: 'Side view',  num: '02' },
-  { id: 'front',       selector: '.spec-panel[data-panel="front"]',   from: 0.34, to: 0.46, label: 'Front light',num: '03' },
-  { id: 'beauty',      selector: null,                                from: 0.48, to: 0.60, label: 'Beauty',     num: '04' },
-  { id: 'battery',     selector: '.spec-panel[data-panel="battery"]', from: 0.60, to: 0.74, label: 'Energy',     num: '05' },
-  { id: 'beauty-rear', selector: null,                                from: 0.74, to: 0.86, label: 'Rear beauty',num: '06' },
-  { id: 'rear',        selector: '.spec-panel[data-panel="rear"]',    from: 0.86, to: 0.92, label: 'Visibility', num: '07' },
-  { id: 'aerial',      selector: null,                                from: 0.92, to: 0.98, label: 'Fly-over',   num: '08' },
-  { id: 'logo',        selector: '#display-logo',                     from: 0.98, to: 1.01, label: 'MOEVS',      num: '09' },
+  { id: 'side',        selector: '#color-picker',                     from: 0.13, to: 0.26, label: 'Side view',  num: '01' },
+  { id: 'front',       selector: '.spec-panel[data-panel="front"]',   from: 0.42, to: 0.57, label: 'Front light', num: '02' },
+  { id: 'battery',     selector: '.spec-panel[data-panel="battery"]', from: 0.60, to: 0.72, label: 'Battery',    num: '04' },
+  { id: 'beauty-rear', selector: null,                                from: 0.74, to: 0.85, label: 'Rear',       num: '05' },
+  { id: 'rear',        selector: '.spec-panel[data-panel="rear"]',    from: 0.85, to: 0.92, label: 'Taillight',  num: '06' },
+  { id: 'aerial',      selector: null,                                from: 0.92, to: 0.97, label: 'Fly-over',   num: '07' },
+  { id: 'logo',        selector: null,                                from: 0.97, to: 1.01, label: 'MOEVS',      num: '08' },
 ];
 
 // helper voor zachte fade-curve
@@ -1255,9 +1628,26 @@ const smoothstep = (x, a, b) => {
   return t * t * (3 - 2 * t);
 };
 
-const sceneNum   = document.getElementById('scene-num');
-const sceneName  = document.getElementById('scene-name');
+// trapezium-puls (0 buiten [a,d], op naar 1 tussen a-b, vast tot c, af tot d)
+const pulse = (x, a, b, c, d) => {
+  if (x <= a || x >= d) return 0;
+  if (x < b) return smoothstep(x, a, b);
+  if (x <= c) return 1;
+  return 1 - smoothstep(x, c, d);
+};
+// "night mode": dimt de scene op het koplamp- en achterlicht-moment zodat de LED's oplichten
+// (koplamp: dimt pas bij het inzoomen op de strip, niet bij de brede start)
+const nightAt = (p) => Math.max(pulse(p, 0.40, 0.44, 0.51, 0.56), pulse(p, 0.83, 0.87, 0.905, 0.925));
+
+// LED-beat-envelope: waar de lamp fel oplicht (koplamp tijdens de front-light-draai)
+const headBeat = (p) => pulse(p, 0.38, 0.43, 0.51, 0.56);
+const tailBeat = (p) => pulse(p, 0.84, 0.865, 0.905, 0.92);
+
 const progressEls = [...document.querySelectorAll('.progress__step')];
+const heroCopy    = document.getElementById('hero-copy');
+const heroCue     = document.getElementById('hero-scrollcue');
+const scenePin    = document.querySelector('.scene-pin');
+const colorPicker = document.getElementById('color-picker');
 
 ScrollTrigger.create({
   trigger: '.scene-container',
@@ -1267,6 +1657,32 @@ ScrollTrigger.create({
   onUpdate: (self) => {
     const p = self.progress;
     scrollProgress = p;
+
+    // ── Hero-overlay dissolve + journey-UI reveal ──
+    const heroInf = 1 - smoothstep(p, 0.0, 0.07);
+    if (heroCopy) {
+      heroCopy.style.opacity = heroInf;
+      heroCopy.style.transform = 'translateY(' + ((1 - heroInf) * -24) + 'px)';
+      heroCopy.style.pointerEvents = heroInf < 0.05 ? 'none' : '';
+    }
+    if (heroCue) heroCue.style.opacity = heroInf;
+    if (scenePin) scenePin.classList.toggle('journey-active', p > 0.10);
+
+    // ── LED-showcase: dim de scene op het koplamp/achterlicht-moment; de emissieve
+    //    lampen (toneMapped:false) blijven fel en lichten dramatisch op. ──
+    const night = nightAt(p);
+    renderer.toneMappingExposure = 1.45 - 1.05 * night;   // 1.45 -> 0.40
+    key.intensity                = 2.60 - 2.25 * night;   // 2.60 -> 0.35
+    fill.intensity               = 1.10 - 0.98 * night;   // 1.10 -> 0.12
+    scene.environmentIntensity   = 1.25 - 1.00 * night;   // 1.25 -> 0.25
+
+    // ── Lamp fel laten oplichten op zijn zij-shot (koplamp wit, achterlicht rood) ──
+    const bH = headBeat(p), bT = tailBeat(p);
+    for (const l of lampMats) {
+      l.mat.emissiveIntensity = 3.2 + 9.0 * (l.kind === 'head' ? bH : bT);   // normaal 3.2 -> fel op de beat
+    }
+    bloomStrength = 0.6 * bH + 2.0 * bT;      // koplamp bewust minder fel dan achterlicht; 0 daarbuiten
+    activeBloomLayer = bH >= bT ? 1 : 2;      // koplamp-moment -> layer 1, achterlicht -> layer 2
 
     // Welk panel is actief?
     let active = null;
@@ -1282,17 +1698,66 @@ ScrollTrigger.create({
       el.classList.toggle('active', active && active.id === r.id);
     }
 
-    // Scene-label linksboven
-    if (active) {
-      sceneNum.textContent  = active.num;
-      sceneName.textContent = active.label;
-    }
-
     // Progress-bullets rechts
     const stepIndex = active ? PANEL_RANGES.indexOf(active) : -1;
     progressEls.forEach((el, i) => el.classList.toggle('active', i === stepIndex));
   },
 });
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ COLOR CONFIGURATOR — kleurwissel + hero-interactie
+   ────────────────────────────────────────────────────────── */
+const swatches = [...document.querySelectorAll('.swatch')];
+const colorNameEl = document.getElementById('color-name');
+
+swatches.forEach((sw) => {
+  sw.addEventListener('click', () => {
+    setBikeColor(sw.dataset.color);
+    swatches.forEach((s) => {
+      const on = s === sw;
+      s.classList.toggle('is-active', on);
+      s.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    // kleurnaam cross-fade
+    if (colorNameEl) {
+      colorNameEl.textContent = sw.dataset.name || sw.getAttribute('aria-label') || '';
+      colorNameEl.classList.remove('swap'); void colorNameEl.offsetWidth; colorNameEl.classList.add('swap');
+    }
+    // micro-settle op het model (los kanaal van de hero-ademing op bikeGroup)
+    if (bikeModel) gsap.fromTo(bikeModel.rotation, { y: -0.12 }, { y: 0, duration: 0.6, ease: 'power3.out', onUpdate: invalidate });
+  });
+});
+
+/* Entrance-choreografie — speelt één keer nadat de preloader verdwijnt. */
+function playHeroEntrance() {
+  if (_reduceMotion) { invalidate(); return; }
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('#hero-copy .hero-line > span', { yPercent: 115, duration: 1.0, stagger: 0.08 }, 0.15)
+    .from('.hero-copy__eyebrow',          { opacity: 0, y: 10, duration: 0.7 }, 0.25)
+    .from('.hero-copy__sub',              { opacity: 0, y: 10, duration: 0.7 }, 0.45)
+    .from('#hero-scrollcue',              { opacity: 0, duration: 0.6 }, 0.75);
+}
+
+/* ──────────────────────────────────────────────────────────
+   ▸▸▸ STATS — kerncijfers tellen op, gekoppeld aan de scrollpositie (1 voor 1)
+   ────────────────────────────────────────────────────────── */
+const statVals = [...document.querySelectorAll('.stat-val')];
+if (statVals.length) {
+  const A = 0.0, B = 0.42;   // alle getallen tellen TEGELIJK op en zijn hier al klaar (eerder)
+  ScrollTrigger.create({
+    trigger: '#stats',
+    start: 'top 80%',
+    end: 'bottom 62%',
+    scrub: true,
+    onUpdate: (self) => {
+      const t = Math.max(0, Math.min(1, (self.progress - A) / (B - A)));
+      statVals.forEach((el) => { el.textContent = Math.round(+el.dataset.to * t); });
+    },
+  });
+}
+
+/* Herstel één frame bij terugkeer naar de tab. */
+document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });
 </script>
 </body>
 </html>
